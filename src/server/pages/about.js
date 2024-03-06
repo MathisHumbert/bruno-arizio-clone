@@ -1,27 +1,66 @@
-import { html } from 'lit-html';
-import { render } from '@lit-labs/ssr';
-import { collectResultSync } from '@lit-labs/ssr/lib/render-result.js';
+import PrismicDOM from 'prismic-dom';
+import lodash from 'lodash';
+
+const { map } = lodash;
 
 export function renderAbout(data) {
-  const ssrResult = render(myTemplate(data));
-  const result = collectResultSync(ssrResult);
+  console.log(data);
+  const { about } = data;
 
-  return result;
-}
-
-const myTemplate = (data) =>
-  html`
+  return /*html*/ `
     <div class="content" id="content" data-template="about">
-      <div class="about" data-background="#dedede" data-color="#1e1e1e">
+      <div class="about">
         <div class="about__wrapper">
-          <div class="about__top">
-            <h1>${data.about.title} Page</h1>
-            <a href=${data.about.link.url}>${data.about.link.text} Link</a>
+          <div class="about__title">
+            ${PrismicDOM.RichText.asHtml(about.data.title)}
           </div>
-          <div class="about__bottom">
-            <div class="about__media"></div>
+          <div class="about__description about__description--biography">
+            ${PrismicDOM.RichText.asHtml(about.data.description)}
+          </div>
+          <div class="about__columns">
+            <div class="about__columns__column">
+              <h2 class="about__subtitle">${about.data.contact_title}</h2>
+              <p class="about__description">
+              ${map(
+                about.data.contact_list,
+                (contact) => /*html*/ `
+                <span class="about__description__line">
+                  <a href="${contact.link.url}" class="about__link">${contact.text}</a>
+                </span>
+              `
+              ).join('')}
+              </p>
+              <h2 class="about__subtitle">${about.data.awards_title}</h2>
+              <p class="about__description">
+              ${map(
+                about.data.awards_list,
+                (award) => /*html*/ `
+                <span class="about__description__line">
+                  <a  class="about__link">${award.text}</a>
+                </span>
+              `
+              ).join('')}
+              </p>
+            </div>
+            <div class="about__columns__column">
+              <h2 class="about__subtitle">${about.data.social_title}</h2>
+              <p class="about__description">
+              ${map(
+                about.data.social_list,
+                (social) => /*html*/ `
+                <span class="about__description__line">
+                  <a href="${social.link.url}" class="about__link">${social.text}</a>
+                </span>
+              `
+              ).join('')}
+              </p>
+            </div>
+          </div>
+          <div class="about__description about__description--credits">
+          ${PrismicDOM.RichText.asHtml(about.data.credits)}
           </div>
         </div>
       </div>
     </div>
   `;
+}

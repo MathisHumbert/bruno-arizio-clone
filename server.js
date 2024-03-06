@@ -7,7 +7,10 @@ import bodyParser from 'body-parser';
 import methodOverride from 'method-override';
 import * as prismic from '@prismicio/client';
 import path from 'path';
+import lodash from 'lodash';
 import 'dotenv/config';
+
+const { find, map } = lodash;
 
 const isProduction = process.env.NODE_ENV === 'production';
 const port = process.env.PORT || 3000;
@@ -32,23 +35,36 @@ const initApi = (req) => {
 };
 
 const fetchDefaults = async (api) => {
-  // const meta = await api.getSingle('meta');
-
   const assets = [];
 
-  return { assets };
+  const navigation = await api.getSingle('navigation');
+
+  const projectsList = await api.getAllByType('project');
+  const projectsOrder = await api.getSingle('ordering');
+
+  const projects = map(projectsOrder.data.list, ({ project }) =>
+    find(projectsList, { uid: project.uid })
+  );
+
+  return { navigation, projects, assets };
 };
 
 const fetchHome = async (api) => {
-  const home = api.getSingle('home');
+  const home = await api.getSingle('home');
 
   return home;
 };
 
 const fetchAbout = async (api) => {
-  const about = api.getSingle('about');
+  const about = await api.getSingle('about');
 
   return about;
+};
+
+const fetchEssays = async (api) => {
+  const essays = await api.getSingle('essays');
+
+  return essays;
 };
 
 const app = express();
@@ -79,18 +95,15 @@ if (!isProduction) {
   app.use(base, sirv('./dist/client', { extensions: [] }));
 }
 
-// Serve HTML
-app.use('*', async (req, res) => {
+app.use(async (req, res, next) => {
   try {
     const url = req.originalUrl.replace(base, '');
     const api = initApi(req);
 
     let template;
     let render;
-    let data = {};
 
     if (!isProduction) {
-      // Always read fresh template in development
       template = await fs.readFile(path.resolve('index.html'), 'utf-8');
       template = await vite.transformIndexHtml(url, template);
       render = (await vite.ssrLoadModule(path.resolve('src/entry-server.js')))
@@ -108,19 +121,27 @@ app.use('*', async (req, res) => {
     }
 
     const defaults = await fetchDefaults(api);
-    data = { ...defaults };
 
-    if (url === '') {
-      // data.home = await fetchHome(api);
-      data.home = { title: 'Home', link: { text: 'About', url: '/about' } };
-    }
+    req.api = api;
+    req.defaults = defaults;
+    req.render = render;
+    req.template = template;
 
-    if (url === 'about') {
-      // data.about = await fetchAbout({});
-      data.about = { title: 'About', link: { text: 'Home', url: '/' } };
-    }
+    next();
+  } catch (e) {
+    vite?.ssrFixStacktrace(e);
+    console.log(e.stack);
+    res.status(500).end(e.stack);
+  }
+});
 
-    const rendered = await render(url, data);
+app.get('/', async (req, res) => {
+  try {
+    const { api, render, defaults, template } = req;
+
+    const home = await fetchHome(api);
+
+    const rendered = await render('home', { ...defaults, home });
 
     const html = template
       .replace('<!--app-head-->', rendered.head ?? '')
@@ -135,7 +156,94 @@ app.use('*', async (req, res) => {
   }
 });
 
-// Start http server
+app.get('/about', async (req, res) => {
+  try {
+    const { api, render, defaults, template } = req;
+
+    const about = await fetchAbout(api);
+
+    const rendered = await render('about', { ...defaults, about });
+
+    const html = template
+      .replace('<!--app-head-->', rendered.head ?? '')
+      .replace('<!--app-html-->', rendered.html ?? '')
+      .replace('<!--app-script-->', rendered.script ?? '');
+
+    res.status(200).set({ 'Content-Type': 'text/html' }).send(html);
+  } catch (e) {
+    vite?.ssrFixStacktrace(e);
+    console.log(e.stack);
+    res.status(500).end(e.stack);
+  }
+});
+
+app.get('/essays', async (req, res) => {
+  try {
+    const { api, render, defaults, template } = req;
+
+    const about = await fetchAbout(api);
+    const essays = await fetchEssays(api);
+
+    const rendered = await render('essays', { ...defaults, about, essays });
+
+    const html = template
+      .replace('<!--app-head-->', rendered.head ?? '')
+      .replace('<!--app-html-->', rendered.html ?? '')
+      .replace('<!--app-script-->', rendered.script ?? '');
+
+    res.status(200).set({ 'Content-Type': 'text/html' }).send(html);
+  } catch (e) {
+    vite?.ssrFixStacktrace(e);
+    console.log(e.stack);
+    res.status(500).end(e.stack);
+  }
+});
+
+app.get('/index', async (req, res) => {
+  try {
+    const { api, render, defaults, template } = req;
+
+    const rendered = await render('index', { ...defaults });
+
+    const html = template
+      .replace('<!--app-head-->', rendered.head ?? '')
+      .replace('<!--app-html-->', rendered.html ?? '')
+      .replace('<!--app-script-->', rendered.script ?? '');
+
+    res.status(200).set({ 'Content-Type': 'text/html' }).send(html);
+  } catch (e) {
+    vite?.ssrFixStacktrace(e);
+    console.log(e.stack);
+    res.status(500).end(e.stack);
+  }
+});
+
+app.get('/case/:id', async (req, res) => {
+  try {
+    const { render, defaults, template } = req;
+    const { projects } = defaults;
+
+    const project = find(projects, (p) => p.uid === req.params.id);
+    const projectIndex = projects.indexOf(project);
+    const related = projects[projectIndex + 1]
+      ? projects[projectIndex + 1]
+      : projects[0];
+
+    const rendered = await render('case', { ...defaults, project, related });
+
+    const html = template
+      .replace('<!--app-head-->', rendered.head ?? '')
+      .replace('<!--app-html-->', rendered.html ?? '')
+      .replace('<!--app-script-->', rendered.script ?? '');
+
+    res.status(200).set({ 'Content-Type': 'text/html' }).send(html);
+  } catch (e) {
+    vite?.ssrFixStacktrace(e);
+    console.log(e.stack);
+    res.status(500).end(e.stack);
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server started at http://localhost:${port}`);
 });

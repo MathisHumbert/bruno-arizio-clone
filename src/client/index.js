@@ -11,6 +11,9 @@ import Preloader from './components/Preloader';
 
 import Home from './pages/Home';
 import About from './pages/About';
+import Case from './pages/Case';
+import Essays from './pages/Essays';
+import Index from './pages/Index';
 
 export default class App {
   constructor() {
@@ -47,6 +50,9 @@ export default class App {
     this.pages = {
       home: new Home(),
       about: new About(),
+      case: new Case(),
+      essays: new Essays(),
+      index: new Index(),
     };
 
     this.page = this.pages[this.template];

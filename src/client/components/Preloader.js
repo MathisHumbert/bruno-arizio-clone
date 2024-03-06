@@ -30,8 +30,8 @@ export default class Preloader extends Component {
       [...images].map(
         (image) =>
           new Promise((resolve) => {
-            textureLoader.load(image, (texture) => {
-              window.TEXTURES[image] = texture;
+            textureLoader.load(image.src, (texture) => {
+              window.TEXTURES[image.src] = texture;
               resolve();
             });
           })
@@ -59,8 +59,8 @@ export default class Preloader extends Component {
         [...images].map(
           (image) =>
             new Promise((resolve) => {
-              textureLoader.load(image, (texture) => {
-                window.TEXTURES[image] = texture;
+              textureLoader.load(image.src, (texture) => {
+                window.TEXTURES[image.src] = texture;
                 resolve();
               });
             })
