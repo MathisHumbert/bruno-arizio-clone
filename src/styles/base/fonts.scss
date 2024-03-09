@@ -1,17 +1,23 @@
-// @font-face {
-//   font-family: font(font1);
-//   src: url('../fonts/font1.woff2') format('woff2'),
-//     url('../fonts/font1.woff') format('woff');
-//   font-weight: normal;
-//   font-style: normal;
-//   font-display: swap;
-// }
+@font-face {
+  font-family: $font-apercu-pro-bold;
+  src: url('../fonts/apercu-pro-bold.woff2') format('woff2'),
+    url('../fonts/apercu-pro-bold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
 
-// @font-face {
-//   font-family: font(font2);
-//   src: url('../fonts/font2.woff2') format('woff2'),
-//     url('../fonts/font2.woff') format('woff');
-//   font-weight: normal;
-//   font-style: normal;
-//   font-display: swap;
-// }
+@font-face {
+  font-family: $font-apercu-pro-medium;
+  src: url('../fonts/apercu-pro-medium.woff2') format('woff2'),
+    url('../fonts/apercu-pro-medium.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: $font-apercu-pro-regular;
+  src: url('../fonts/apercu-pro-regular.woff2') format('woff2'),
+    url('../fonts/apercu-pro-regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}

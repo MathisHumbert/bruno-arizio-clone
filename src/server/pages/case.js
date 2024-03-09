@@ -3,13 +3,13 @@ import lodash from 'lodash';
 const { map } = lodash;
 
 export function renderCase(data) {
-  const { project, related } = data;
+  const { project, projectIndex, related } = data;
 
   return /*html*/ `
     <div class="content" id="content" data-template="case">
-      <div class="case">
+      <div class="case case--${project.data.type.toLowerCase()}" data-index="${projectIndex}">
         <button class="case__header__button">
-          <span class="case__header__button">Scroll</span>
+          <span class="case__header__button__text">Scroll</span>
           <svg
             class="case__header__button__arrow"
             xmlns="http://www.w3.org/2000/svg"
@@ -43,7 +43,11 @@ export function renderCase(data) {
                         1920
                       )}px"
                     >
-                      <span class="case__image__wrapper">
+                      <span class="case__image__wrapper" style="padding-top: ${
+                        (item.primary.image.dimensions.height /
+                          item.primary.image.dimensions.width) *
+                        100
+                      }%">
                         <img
                           src="${item.primary.image.url}"
                           alt="${item.primary.image.alt}"
@@ -66,7 +70,9 @@ export function renderCase(data) {
               <footer class="case__footer">
                 <span class="case__footer__label">Go to</span>
                 <span class="case__footer__wrapper">
-                  <a href="/case/${related.uid}" data-link>
+                  <a href="/case/${
+                    related.uid
+                  }" class="case__footer__button" data-link>
                     <span
                       class="case__footer__button__text"
                       data-text="${related.data.name}"

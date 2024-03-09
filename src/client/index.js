@@ -5,9 +5,12 @@ import './utils/scroll';
 import AutoBind from 'auto-bind';
 import each from 'lodash/each';
 import NormalizeWheel from 'normalize-wheel';
+import * as THREE from 'three';
 
 import Canvas from './components/Canvas';
 import Preloader from './components/Preloader';
+
+import Responsive from './classes/Responsive';
 
 import Home from './pages/Home';
 import About from './pages/About';
@@ -21,11 +24,14 @@ export default class App {
 
     this.url = window.location.href;
     this.isLoading = false;
+    this.clock = new THREE.Clock();
+    this.odlElapsedTime = 0;
 
     this.init();
   }
 
   init() {
+    this.createResponsive();
     this.createContent();
 
     this.createCanvas();
@@ -41,6 +47,10 @@ export default class App {
   /**
    * Create.
    */
+  createResponsive() {
+    this.responsive = new Responsive();
+  }
+
   createContent() {
     this.content = document.querySelector('.content');
     this.template = this.content.getAttribute('data-template');
@@ -147,6 +157,10 @@ export default class App {
   }
 
   onResize() {
+    if (this.responsive && this.responsive.onResize) {
+      this.responsive.onResize();
+    }
+
     if (this.page && this.page.onResize) {
       this.page.onResize();
     }
@@ -204,12 +218,16 @@ export default class App {
    * Loop.
    */
   update() {
+    const elapsedTime = this.clock.getElapsedTime();
+    const deltaTime = elapsedTime - this.odlElapsedTime;
+    this.odlElapsedTime = elapsedTime;
+
     if (this.page && this.page.update) {
       this.page.update();
     }
 
     if (this.canvas && this.canvas.update) {
-      this.canvas.update(this.page.scroll.current);
+      this.canvas.update(this.page.scroll.current, deltaTime);
     }
 
     window.requestAnimationFrame(this.update.bind(this));

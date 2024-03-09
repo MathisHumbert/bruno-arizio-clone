@@ -7,7 +7,6 @@
 
 %page__wrapper {
   position: relative;
-  color: inherit;
   will-change: transform;
-  z-index: z('content');
+  z-index: 1;
 }

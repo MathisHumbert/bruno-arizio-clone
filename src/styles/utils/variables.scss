@@ -1,13 +1,21 @@
-$z-indexes: ('preloader', 'navigation', 'content', 'canvas');
+$ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 
-$_easings: (
-  ease-in-out: cubic-bezier(0.77, 0, 0.175, 1),
-);
+$color-black: #000;
+$color-black-lighter: #050505;
+$color-gray: #ddd;
+$color-snow: #f4f4f4;
+$color-white: #fff;
 
 $breakpoints: (
-  'phone': 768px,
-  'tablet': 1024px,
-  'desktop': 1920px,
+  'small': 768px,
+  'medium': 1024px,
+  'large': 1280px,
+  'very-large': 1366px,
+  'extra-large': 1920px,
 ) !default;
+
+$font-apercu-pro-bold: 'Apercu Pro Bold';
+$font-apercu-pro-medium: 'Apercu Pro Medium';
+$font-apercu-pro-regular: 'Apercu Pro Regular';
 
 @import 'node_modules/include-media/dist/include-media';

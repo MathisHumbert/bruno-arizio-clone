@@ -1,4 +1,7 @@
-import Media from '../Media';
+import { debounce, each, map } from 'lodash';
+
+import Project from './Project';
+import { lerp } from '../../../utils/math';
 
 export default class Home {
   constructor({ scene, geometry, screen, viewport }) {
@@ -7,48 +10,190 @@ export default class Home {
     this.screen = screen;
     this.viewport = viewport;
 
-    this.createMedia();
+    this.scroll = {
+      position: 0,
+      current: 0,
+      target: 0,
+      limit: 0,
+      last: 0,
+      ease: 0.1,
+    };
+    this.isDown = 0;
+    this.indexInfinite = 0;
+    this.direction = 'none';
+
+    this.onCheckDebounce = debounce(this.onCheck, 200);
+    this.onHoldEndDebounce = debounce(this.onHoldEnd, 200);
+
+    this.createProject();
 
     this.show();
   }
 
-  createMedia() {
-    this.media = new Media({
-      element: document.querySelector('.home__media'),
-      scene: this.scene,
-      geometry: this.geometry,
-      screen: this.screen,
-      viewport: this.viewport,
-    });
+  createProject() {
+    this.projects = map(
+      appData.projects,
+      (project, index) =>
+        new Project({
+          scene: this.scene,
+          geometry: this.geometry,
+          screen: this.screen,
+          viewport: this.viewport,
+          texture: window.TEXTURES[project.data.desktop.url],
+          index,
+        })
+    );
   }
 
   /**
    * Animations.
    */
   show() {
-    this.media.show();
+    if (this.media) {
+      this.media.show();
+    }
   }
 
   hide() {
-    this.media.hide();
+    if (this.media) {
+      this.media.hide();
+    }
   }
 
   /**
    * Events.
    */
   onResize({ screen, viewport }) {
-    if (this.media && this.media.onResize) {
-      this.media.onResize({ screen, viewport });
-    }
+    this.screen = screen;
+    this.viewport = viewport;
+
+    this.scaledViewportHeight = this.viewport.height * 1.33;
+    this.heightTotal = this.scaledViewportHeight * this.projects.length;
+
+    each(this.projects, (project) => {
+      if (project && project.onResize) {
+        project.onResize({ screen, viewport });
+      }
+    });
+  }
+
+  onTouchDown(event) {
+    this.isDown = true;
+
+    this.scroll.position = this.scroll.current;
+    this.start = event.touches ? event.touches[0].clientY : event.clientY;
+
+    this.onHoldStart();
+  }
+
+  onTouchMove(event) {
+    if (!this.isDown) return;
+
+    const y = event.touches ? event.touches[0].clientY : event.clientY;
+    const distance = (this.start - y) * 0.5;
+
+    this.scroll.target = this.scroll.position + distance;
+  }
+
+  onTouchUp() {
+    this.isDown = false;
+
+    this.onCheck();
+    this.onHoldEnd();
+  }
+
+  onWheel(normalized) {
+    const speed = normalized.pixelY;
+
+    this.scroll.target += speed * 0.5;
+
+    this.onCheckDebounce();
+
+    this.onHoldStart();
+    this.onHoldEndDebounce();
+  }
+
+  onHoldStart() {
+    each(this.projects, (project) => {
+      if (project && project.onTouchStart) {
+        project.onTouchStart();
+      }
+    });
+  }
+
+  onHoldEnd() {
+    each(this.projects, (project) => {
+      if (project && project.onTouchEnd) {
+        project.onTouchEnd();
+      }
+    });
+  }
+
+  onCheck() {
+    this.scroll.target = this.scaledViewportHeight * this.indexInfinite;
   }
 
   /**
    * Loop.
    */
-  update(scroll) {
-    if (this.media && this.media.update) {
-      this.media.update(scroll);
+  update(time) {
+    this.scroll.current = lerp(
+      this.scroll.current,
+      this.scroll.target,
+      this.scroll.ease
+    );
+
+    if (this.scroll.current < this.scroll.last) {
+      this.direction = 'up';
+    } else if (this.scroll.current > this.scroll.last) {
+      this.direction = 'down';
+    } else {
+      this.direction = 'none';
     }
+
+    this.indexInfinite = Math.round(
+      this.scroll.target / this.scaledViewportHeight
+    );
+
+    let index = this.indexInfinite % this.projects.length;
+
+    if (this.indexInfinite < 0) {
+      index =
+        (this.projects.length -
+          Math.abs(this.indexInfinite % this.projects.length)) %
+        this.projects.length;
+    }
+
+    if (this.index !== index) {
+      this.index = index;
+    }
+
+    each(this.projects, (project) => {
+      if (project) {
+        project.isBefore = project.mesh.position.y > this.scaledViewportHeight;
+        project.isAfter = project.mesh.position.y < -this.scaledViewportHeight;
+
+        if (this.direction === 'down' && project.isBefore) {
+          project.location -= this.heightTotal;
+
+          project.isBefore = false;
+          project.isAfter = false;
+        }
+
+        if (this.direction === 'up' && project.isAfter) {
+          project.location += this.heightTotal;
+
+          project.isBefore = false;
+          project.isAfter = false;
+        }
+
+        if (project.update) {
+          project.update(this.scroll.current, time);
+        }
+      }
+    });
+
+    this.scroll.last = this.scroll.current;
   }
 
   /**

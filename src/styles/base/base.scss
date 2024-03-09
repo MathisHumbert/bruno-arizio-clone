@@ -8,24 +8,56 @@
 html {
   @extend %cover;
 
-  @include media('<phone') {
-  }
-
   position: fixed;
   overflow: hidden;
   overscroll-behavior: none;
+  // cursor: none;
+  font-size: 10px;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
+
+  @include media('<=1728px') {
+    font-size: 9px;
+  }
+
+  @include media('<=1536px') {
+    font-size: 8px;
+  }
+
+  @include media('<=1344px') {
+    font-size: 7px;
+  }
+
+  @include media('<=1152px') {
+    font-size: 6px;
+  }
+
+  @include media('<=960px') {
+    font-size: 5px;
+  }
+
+  @include media('<=768px') {
+    font-size: 4px;
+  }
+
+  @include media('<768px') {
+    font-size: 10px;
+  }
 }
 
 body {
   @extend %cover;
 
   position: fixed;
+  background: $color-black-lighter;
+  color: $color-white;
+  user-select: none;
+  overflow: hidden;
 }
 
 a {
   color: inherit;
+  // cursor: none;
   outline: none;
   text-decoration: none;
 }
@@ -33,8 +65,10 @@ a {
 button {
   background: none;
   border: none;
+  border-radius: none;
   color: inherit;
-  cursor: pointer;
+  cursor: none;
+  font: inherit;
   outline: none;
 }
 
@@ -45,7 +79,12 @@ canvas {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: z('canvas');
+  z-index: 0;
+}
+
+img {
+  max-width: 100%;
+  vertical-align: middle;
 }
 
 .content {

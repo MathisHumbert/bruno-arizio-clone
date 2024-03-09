@@ -26,10 +26,10 @@ export default class Canvas {
     this.camera = new THREE.PerspectiveCamera(
       45,
       window.innerWidth / window.innerHeight,
-      0.1,
-      100
+      1,
+      500
     );
-    this.camera.position.z = 5;
+    this.camera.position.z = 300;
   }
 
   createRender() {
@@ -154,20 +154,36 @@ export default class Canvas {
     }
   }
 
-  onTouchDown(event) {}
+  onTouchDown(event) {
+    if (this.home && this.home.onTouchDown) {
+      this.home.onTouchDown(event);
+    }
+  }
 
-  onTouchMove(event) {}
+  onTouchMove(event) {
+    if (this.home && this.home.onTouchMove) {
+      this.home.onTouchMove(event);
+    }
+  }
 
-  onTouchUp() {}
+  onTouchUp() {
+    if (this.home && this.home.onTouchUp) {
+      this.home.onTouchUp();
+    }
+  }
 
-  onWheel(normalized) {}
+  onWheel(normalized) {
+    if (this.home && this.home.onWheel) {
+      this.home.onWheel(normalized);
+    }
+  }
 
   /**
    * Loop.
    */
-  update(scroll) {
+  update(scroll, deltaTime) {
     if (this.home && this.home.update) {
-      this.home.update(scroll);
+      this.home.update(deltaTime);
     }
 
     if (this.about && this.about.update) {

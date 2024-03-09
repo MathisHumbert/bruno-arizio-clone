@@ -5,6 +5,7 @@ import { renderCase } from './server/pages/case';
 import { renderIndex } from './server/pages';
 
 import { renderHead } from './server/layouts/head';
+import { renderNavigation } from './server/layouts/navigation';
 
 export function render(templace, data) {
   let html = '';
@@ -29,11 +30,17 @@ export function render(templace, data) {
     html = renderCase(data);
   }
 
+  html += renderNavigation(data);
+  html += /*html*/ `
+  <div className="cursor"></div>
+  <div className="scrollbar"></div>
+  `;
+
   let head = renderHead(data);
 
   let script = /*html*/ `
     <script>
-    ${JSON.stringify(data.assets).replace(/<\//g, '<\\/')}
+      const appData = ${JSON.stringify(data)};
     </script>
   `;
 

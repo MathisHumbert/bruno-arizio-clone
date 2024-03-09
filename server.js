@@ -229,7 +229,12 @@ app.get('/case/:id', async (req, res) => {
       ? projects[projectIndex + 1]
       : projects[0];
 
-    const rendered = await render('case', { ...defaults, project, related });
+    const rendered = await render('case', {
+      ...defaults,
+      project,
+      projectIndex,
+      related,
+    });
 
     const html = template
       .replace('<!--app-head-->', rendered.head ?? '')

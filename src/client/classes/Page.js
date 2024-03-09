@@ -9,6 +9,7 @@ import { Detection } from '../classes/Detection';
 import Highlight from '../animations/Highlight';
 import { clamp, lerp } from '../utils/math';
 import { mapEach } from '../utils/dom';
+import { COLOR_GRAY, COLOR_WHITE } from '../utils/colors';
 
 export default class Page extends EventEmitter {
   constructor({ classes, id, element, elements, isScrollable = true }) {
@@ -167,10 +168,17 @@ export default class Page extends EventEmitter {
 
     this.addEventListeners();
 
-    // gsap.set(document.documentElement, {
-    //   backgroundColor: this.element.getAttribute('data-background'),
-    //   color: this.element.getAttribute('data-color'),
-    // });
+    if (this.id === 'about') {
+      gsap.to(document.body, {
+        backgroundColor: COLOR_WHITE,
+        color: COLOR_GRAY,
+      });
+    } else {
+      gsap.to(document.body, {
+        backgroundColor: COLOR_GRAY,
+        color: COLOR_WHITE,
+      });
+    }
 
     return Promise.resolve();
   }

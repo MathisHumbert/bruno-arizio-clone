@@ -4,7 +4,6 @@ import lodash from 'lodash';
 const { map } = lodash;
 
 export function renderAbout(data) {
-  console.log(data);
   const { about } = data;
 
   return /*html*/ `

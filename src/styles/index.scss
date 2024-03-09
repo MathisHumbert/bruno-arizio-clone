@@ -9,5 +9,10 @@
 @import './base/fonts';
 @import './base/base';
 
+@import './layout/navigation';
+
 @import './pages/home/home';
+@import './pages/cases/cases';
+@import './pages/index/index';
 @import './pages/about/about';
+@import './pages/essays/essays';

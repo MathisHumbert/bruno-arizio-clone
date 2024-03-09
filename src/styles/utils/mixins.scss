@@ -12,6 +12,14 @@
   justify-content: center;
 }
 
+%animation {
+  span {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+  }
+}
+
 @mixin ratio($height, $width) {
   font-size: 0;
   overflow: hidden;

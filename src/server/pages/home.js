@@ -15,7 +15,7 @@ export function renderHome(data) {
                   index === 0 ? 'home__project--active' : ''
                 }"
               >
-                <h2>${project.data.name}</h2>
+                <h2 class="home__project__title">${project.data.name}</h2>
                 <a href="/case/${project.uid}" class="home__project__link">
                   <span class="home__project__link__wrapper">
                     <span class="home__project__link__text"

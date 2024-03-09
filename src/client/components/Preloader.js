@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import imagesLoaded from 'imagesloaded';
+import { map } from 'lodash';
 
 import Component from '../classes/Component';
 
@@ -24,14 +25,19 @@ export default class Preloader extends Component {
       imagesLoaded(content, { background: true }, resolve);
     });
 
+    const desktopImages = map(
+      appData.projects,
+      (project) => project.data.desktop.url
+    );
+
     const textureLoader = new THREE.TextureLoader();
 
     const preloadTextures = Promise.all(
-      [...images].map(
+      [...desktopImages].map(
         (image) =>
           new Promise((resolve) => {
-            textureLoader.load(image.src, (texture) => {
-              window.TEXTURES[image.src] = texture;
+            textureLoader.load('/texture.jpeg', (texture) => {
+              window.TEXTURES[image] = texture;
               resolve();
             });
           })

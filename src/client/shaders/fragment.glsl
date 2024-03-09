@@ -1,10 +1,49 @@
-precision mediump float;
+#pragma glslify: cnoise = require(glsl-noise/classic/3d)
 
+uniform sampler2D uTexture;
+uniform vec2 uScreenSizes;
+uniform vec2 uImageSizes;
+uniform float uScale;
+uniform float uTime;
 uniform float uAlpha;
-uniform vec3 uColor;
+uniform float uDisplacementX;
+uniform float uDisplacementY;
 
 varying vec2 vUv;
 
+vec2 getCorrectUv (vec2 screenSizes, vec2 imageSizes, vec2 uv){
+  vec2 ratio = vec2(
+    min(((screenSizes.x / screenSizes.y) / (imageSizes.x / imageSizes.y)), 1.),
+    min(((screenSizes.y / screenSizes.x) / (imageSizes.y / imageSizes.x)), 1.)
+  );
+
+  return vec2(
+    vUv.x * ratio.x + (1.0 - ratio.x) * 0.5,
+    vUv.y * ratio.y + (1.0 - ratio.y) * 0.5
+  );
+}
+
+vec2 zoom(vec2 uv, float amount) {
+  return 0.5 + ((uv - 0.5) * (1.0 - amount));
+}
+
 void main(){
-  gl_FragColor = vec4(1., 1., 1., uAlpha);
+  vec2 ratio = vec2(
+  min((uScreenSizes.x / uScreenSizes.y) / (uImageSizes.x / uImageSizes.y), 1.0),
+  min((uScreenSizes.y / uScreenSizes.x) / (uImageSizes.y / uImageSizes.x), 1.0)
+);
+
+vec2 uv = vec2(
+  vUv.x * ratio.x + (1.0 - ratio.x) * 0.5,
+  vUv.y * ratio.y + (1.0 - ratio.y) * 0.5
+);
+
+  float noise = cnoise(vec3(uv, cos(uTime * 0.1)) * 10.0 + uTime * 0.5);
+
+  uv.x += noise * uDisplacementX;
+  uv.y += noise * uDisplacementY;
+
+  uv = zoom(uv, uScale);
+
+  gl_FragColor = vec4(texture2D(uTexture, uv).xyz, uAlpha);
 }
