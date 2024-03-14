@@ -38,6 +38,7 @@
     "normalize-wheel": "^1.0.1",
     "prefix": "^1.0.0",
     "three": "^0.161.0",
+    "three-msdf-text-utils": "^1.1.7",
     "ua-parser-js": "^1.0.37",
     "vite": "^5.0.10",
     "vite-plugin-glslify": "^2.0.2"

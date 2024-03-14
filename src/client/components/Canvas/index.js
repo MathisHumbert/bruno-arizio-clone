@@ -1,11 +1,15 @@
 import * as THREE from 'three';
+import EventEmitter from 'events';
 
 import Home from './Home';
 import About from './About';
 
-export default class Canvas {
+export default class Canvas extends EventEmitter {
   constructor({ template }) {
+    super();
+
     this.template = template;
+    this.index = 0;
 
     this.createScene();
     this.createCamera();
@@ -45,7 +49,7 @@ export default class Canvas {
   }
 
   createGeometry() {
-    this.geometry = new THREE.PlaneGeometry(1, 1, 16, 16);
+    this.geometry = new THREE.PlaneGeometry(1, 1, 100, 50);
   }
 
   /**
@@ -118,6 +122,8 @@ export default class Canvas {
 
     if (template === 'home') {
       this.createHome();
+
+      this.home.on('change', (index) => this.onIndexChange(index));
     }
 
     if (template === 'about') {
@@ -176,6 +182,12 @@ export default class Canvas {
     if (this.home && this.home.onWheel) {
       this.home.onWheel(normalized);
     }
+  }
+
+  onIndexChange(index) {
+    this.index = index;
+
+    this.emit('change', index);
   }
 
   /**

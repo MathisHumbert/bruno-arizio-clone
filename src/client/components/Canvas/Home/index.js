@@ -1,10 +1,13 @@
 import { debounce, each, map } from 'lodash';
+import EventEmitter from 'events';
 
 import Project from './Project';
 import { lerp } from '../../../utils/math';
 
-export default class Home {
+export default class Home extends EventEmitter {
   constructor({ scene, geometry, screen, viewport }) {
+    super();
+
     this.scene = scene;
     this.geometry = geometry;
     this.screen = screen;
@@ -20,7 +23,9 @@ export default class Home {
     };
     this.isDown = 0;
     this.indexInfinite = 0;
+    this.index = 0;
     this.direction = 'none';
+    this.scaledViewportHeight = this.viewport.height * 1.33;
 
     this.onCheckDebounce = debounce(this.onCheck, 200);
     this.onHoldEndDebounce = debounce(this.onHoldEnd, 200);
@@ -31,6 +36,7 @@ export default class Home {
   }
 
   createProject() {
+    console.log(appData.projects[0]);
     this.projects = map(
       appData.projects,
       (project, index) =>
@@ -40,9 +46,12 @@ export default class Home {
           screen: this.screen,
           viewport: this.viewport,
           texture: window.TEXTURES[project.data.desktop.url],
+          name: project.data.name,
           index,
         })
     );
+
+    console.log(this.projects[0]);
   }
 
   /**
@@ -105,7 +114,7 @@ export default class Home {
   onWheel(normalized) {
     const speed = normalized.pixelY;
 
-    this.scroll.target += speed * 0.5;
+    this.scroll.target += speed * 0.25;
 
     this.onCheckDebounce();
 
@@ -166,12 +175,14 @@ export default class Home {
 
     if (this.index !== index) {
       this.index = index;
+
+      this.emit('change', this.index);
     }
 
     each(this.projects, (project) => {
       if (project) {
-        project.isBefore = project.mesh.position.y > this.scaledViewportHeight;
-        project.isAfter = project.mesh.position.y < -this.scaledViewportHeight;
+        project.isBefore = project.group.position.y > this.scaledViewportHeight;
+        project.isAfter = project.group.position.y < -this.scaledViewportHeight;
 
         if (this.direction === 'down' && project.isBefore) {
           project.location -= this.heightTotal;
@@ -194,14 +205,5 @@ export default class Home {
     });
 
     this.scroll.last = this.scroll.current;
-  }
-
-  /**
-   * Destroy.
-   */
-  destroy() {
-    if (this.media) {
-      this.media.mesh.removeFromParent();
-    }
   }
 }

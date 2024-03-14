@@ -72,6 +72,12 @@ export default class App {
 
   createCanvas() {
     this.canvas = new Canvas({ template: this.template });
+
+    this.canvas.on('change', (index) => {
+      if (this.page && this.page.onCanvasChange) {
+        this.page.onCanvasChange(index);
+      }
+    });
   }
 
   createPreloader() {

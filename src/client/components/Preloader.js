@@ -36,7 +36,7 @@ export default class Preloader extends Component {
       [...desktopImages].map(
         (image) =>
           new Promise((resolve) => {
-            textureLoader.load('/texture.jpeg', (texture) => {
+            textureLoader.load(image, (texture) => {
               window.TEXTURES[image] = texture;
               resolve();
             });

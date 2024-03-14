@@ -1,69 +1,48 @@
 import * as THREE from 'three';
-import gsap from 'gsap';
 
-import fragment from '../../../shaders/fragment.glsl';
-import vertex from '../../../shaders/vertex.glsl';
-import { map } from '../../../utils/math';
+import Background from './Background';
+import Title from './Title';
 
 export default class Project {
-  constructor({ scene, geometry, screen, viewport, texture, index }) {
+  constructor({ scene, geometry, screen, viewport, texture, name, index }) {
     this.scene = scene;
     this.geometry = geometry;
     this.screen = screen;
     this.viewport = viewport;
     this.texture = texture;
+    this.name = name;
     this.index = index;
+
+    this.group = new THREE.Group();
+    this.scene.add(this.group);
 
     this.location = this.viewport.height * 1.33 * this.index * -1;
 
-    this.createGeometry();
-    this.createMaterial();
-    this.createMesh();
+    this.createBackground();
+    this.createTitle();
   }
 
-  createGeometry() {
-    this.geometry = new THREE.PlaneGeometry(
-      this.viewport.width,
-      this.viewport.height,
-      100,
-      50
-    );
-  }
-
-  createMaterial() {
-    this.material = new THREE.ShaderMaterial({
-      fragmentShader: fragment,
-      vertexShader: vertex,
-      uniforms: {
-        uTexture: { value: this.texture },
-        uScreenSizes: {
-          value: new THREE.Vector2(this.screen.width, this.screen.height),
-        },
-        uImagesSizes: {
-          value: new THREE.Vector2(
-            this.texture.image.width,
-            this.texture.image.height
-          ),
-        },
-        uDisplacementX: { value: 0 },
-        uDisplacementY: { value: 0 },
-        uDistortion: { value: 0 },
-        uDirstortionX: { value: 1.75 },
-        uDistortionY: { value: 2 },
-        uScale: { value: 0 },
-        uTime: { value: 0 },
-        uAlpha: { value: 1 },
-      },
-      transparent: true,
+  createBackground() {
+    this.background = new Background({
+      scene: this.group,
+      geometry: this.geometry,
+      screen: this.screen,
+      viewport: this.viewport,
+      texture: this.texture,
+      index: this.index,
     });
   }
 
-  createMesh() {
-    this.mesh = new THREE.Mesh(this.geometry, this.material);
-    this.mesh.position.y = this.location;
-    this.mesh.position.z = -0.01;
-
-    this.scene.add(this.mesh);
+  createTitle() {
+    this.title = new Title({
+      scene: this.group,
+      geometry: this.geometry,
+      screen: this.screen,
+      viewport: this.viewport,
+      texture: this.texture,
+      name: this.name,
+      index: this.index,
+    });
   }
 
   /**
@@ -72,37 +51,58 @@ export default class Project {
   onResize({ screen, viewport }) {
     this.screen = screen;
     this.viewport = viewport;
+
+    this.location = this.viewport.height * 1.33 * this.index * -1;
+
+    if (this.background && this.background.onResize) {
+      this.background.onResize({ screen, viewport });
+    }
   }
 
   onTouchStart() {
-    gsap.to(this.material.uniforms.uDisplacementY, {
-      value: 0.1,
-      duration: 0.4,
-    });
+    if (this.background && this.background.onTouchStart) {
+      this.background.onTouchStart();
+    }
   }
 
   onTouchEnd() {
-    gsap.killTweensOf(this.material.uniforms.uDisplacementY);
+    if (this.background && this.background.onTouchEnd) {
+      this.background.onTouchEnd();
+    }
+  }
 
-    gsap.to(this.material.uniforms.uDisplacementY, {
-      value: 0,
-      duration: 0.4,
-    });
+  /**
+   * Animations.
+   */
+  show() {
+    if (this.background && this.background.show) {
+      this.background.show();
+    }
+  }
+
+  hide() {
+    if (this.background && this.background.hide) {
+      this.background.hide();
+    }
   }
 
   /**
    * Loop.
    */
   update(scroll, time) {
-    this.mesh.position.y = this.location + scroll;
+    const percent = this.group.position.y / this.viewport.height;
 
-    const percent = this.mesh.position.y / this.viewport.height;
-    const percentAbsolute = Math.abs(percent);
+    this.group.position.y = this.location + scroll;
 
-    this.material.uniforms.uDistortion.value = map(percentAbsolute, 0, 1, 0, 5);
-    this.material.uniforms.uScale.value = map(percent, 0, 1, 0, 0.5);
-    this.material.uniforms.uTime.value += time;
+    if (this.background && this.background.update) {
+      this.background.update(percent, time);
+    }
+  }
 
-    this.mesh.position.z = map(percentAbsolute, 0, 1, -0.01, -50);
+  /**
+   * Destroy.
+   */
+  destroy() {
+    // destroy group
   }
 }

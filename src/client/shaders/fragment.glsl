@@ -1,8 +1,8 @@
 #pragma glslify: cnoise = require(glsl-noise/classic/3d)
 
 uniform sampler2D uTexture;
-uniform vec2 uScreenSizes;
-uniform vec2 uImageSizes;
+uniform vec2 uResolution;
+uniform vec2 uImageResolution;
 uniform float uScale;
 uniform float uTime;
 uniform float uAlpha;
@@ -11,16 +11,17 @@ uniform float uDisplacementY;
 
 varying vec2 vUv;
 
-vec2 getCorrectUv (vec2 screenSizes, vec2 imageSizes, vec2 uv){
+vec2 getCorrectUv (vec2 resolution, vec2 textureResolution){
   vec2 ratio = vec2(
-    min(((screenSizes.x / screenSizes.y) / (imageSizes.x / imageSizes.y)), 1.),
-    min(((screenSizes.y / screenSizes.x) / (imageSizes.y / imageSizes.x)), 1.)
+    min((resolution.x / resolution.y) / (textureResolution.x / textureResolution.y), 1.0),
+    min((resolution.y / resolution.x) / (textureResolution.y / textureResolution.x), 1.0)
   );
 
   return vec2(
     vUv.x * ratio.x + (1.0 - ratio.x) * 0.5,
     vUv.y * ratio.y + (1.0 - ratio.y) * 0.5
   );
+
 }
 
 vec2 zoom(vec2 uv, float amount) {
@@ -28,15 +29,7 @@ vec2 zoom(vec2 uv, float amount) {
 }
 
 void main(){
-  vec2 ratio = vec2(
-  min((uScreenSizes.x / uScreenSizes.y) / (uImageSizes.x / uImageSizes.y), 1.0),
-  min((uScreenSizes.y / uScreenSizes.x) / (uImageSizes.y / uImageSizes.x), 1.0)
-);
-
-vec2 uv = vec2(
-  vUv.x * ratio.x + (1.0 - ratio.x) * 0.5,
-  vUv.y * ratio.y + (1.0 - ratio.y) * 0.5
-);
+  vec2 uv = getCorrectUv(uResolution, uImageResolution);
 
   float noise = cnoise(vec3(uv, cos(uTime * 0.1)) * 10.0 + uTime * 0.5);
 
