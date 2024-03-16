@@ -36,7 +36,6 @@ export default class Home extends EventEmitter {
   }
 
   createProject() {
-    console.log(appData.projects[0]);
     this.projects = map(
       appData.projects,
       (project, index) =>
@@ -50,8 +49,6 @@ export default class Home extends EventEmitter {
           index,
         })
     );
-
-    console.log(this.projects[0]);
   }
 
   /**

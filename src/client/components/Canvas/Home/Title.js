@@ -1,41 +1,24 @@
 import * as THREE from 'three';
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { MSDFTextGeometry, uniforms } from 'three-msdf-text-utils';
 
+import fragment from '../../../shaders/title-fragment.glsl';
+import vertex from '../../../shaders/title-vertex.glsl';
+import { clamp, map } from '../../../utils/math';
+
 export default class Title {
-  constructor({ scene, name }) {
+  constructor({ scene, screen, viewport, name, index }) {
     this.scene = scene;
+    this.screen = screen;
+    this.viewport = viewport;
     this.name = name;
+    this.index = index;
 
-    Promise.all([
-      loadFontAtlas('/ApercuPro-Bold.png'),
-      loadFont('/ApercuPro-Bold-msdf.json'),
-    ]).then(([atlas, font]) => {
-      this.atlas = atlas;
-      this.font = font;
+    this.atlas = window.TITLE.atlas;
+    this.font = window.TITLE.font;
 
-      this.createMaterial();
-      this.createGeometry();
-      this.createMesh();
-    });
-
-    function loadFontAtlas(path) {
-      const promise = new Promise((resolve, reject) => {
-        const loader = new THREE.TextureLoader();
-        loader.load(path, resolve);
-      });
-
-      return promise;
-    }
-
-    function loadFont(path) {
-      const promise = new Promise((resolve, reject) => {
-        const loader = new FontLoader();
-        loader.load(path, resolve);
-      });
-
-      return promise;
-    }
+    this.createGeometry();
+    this.createMaterial();
+    this.createMesh();
   }
 
   createMaterial() {
@@ -57,134 +40,28 @@ export default class Title {
 
         // Strokes
         ...uniforms.strokes,
+
+        // Custom
+        uDistortion: {
+          value: 1,
+        },
+        uDistortionX: {
+          value: 1.75,
+        },
+        uDistortionX: {
+          value: 2,
+        },
+        uAlpha: {
+          value: 1,
+        },
+        uLinesTotal: { value: this.geometry.layout.linesTotal },
+        uLettersTotal: { value: this.geometry.layout.lettersTotal },
+        uWordsTotal: { value: this.geometry.layout.wordsTotal },
       },
-      vertexShader: /*glsl*/ `
-        // Attribute
-        attribute vec2 layoutUv;
-
-        attribute float lineIndex;
-
-        attribute float lineLettersTotal;
-        attribute float lineLetterIndex;
-
-        attribute float lineWordsTotal;
-        attribute float lineWordIndex;
-
-        attribute float wordIndex;
-
-        attribute float letterIndex;
-
-        // Varyings
-        varying vec2 vUv;
-        varying vec2 vLayoutUv;
-        varying vec3 vViewPosition;
-        varying vec3 vNormal;
-
-        varying float vLineIndex;
-
-        varying float vLineLettersTotal;
-        varying float vLineLetterIndex;
-
-        varying float vLineWordsTotal;
-        varying float vLineWordIndex;
-
-        varying float vWordIndex;
-
-        varying float vLetterIndex;
-
-        void main() {
-            // Output
-            vec4 mvPosition = vec4(position, 1.0);
-            mvPosition = modelViewMatrix * mvPosition;
-            gl_Position = projectionMatrix * mvPosition;
-
-            // Varyings
-            vUv = uv;
-            vLayoutUv = layoutUv;
-            vViewPosition = -mvPosition.xyz;
-            vNormal = normal;
-
-            vLineIndex = lineIndex;
-
-            vLineLettersTotal = lineLettersTotal;
-            vLineLetterIndex = lineLetterIndex;
-
-            vLineWordsTotal = lineWordsTotal;
-            vLineWordIndex = lineWordIndex;
-
-            vWordIndex = wordIndex;
-
-            vLetterIndex = letterIndex;
-        }
-    `,
-      fragmentShader: /*glsl*/ `
-        // Varyings
-        varying vec2 vUv;
-
-        // Uniforms: Common
-        uniform float uOpacity;
-        uniform float uThreshold;
-        uniform float uAlphaTest;
-        uniform vec3 uColor;
-        uniform sampler2D uMap;
-
-        // Uniforms: Strokes
-        uniform vec3 uStrokeColor;
-        uniform float uStrokeOutsetWidth;
-        uniform float uStrokeInsetWidth;
-
-        // Utils: Median
-        float median(float r, float g, float b) {
-            return max(min(r, g), min(max(r, g), b));
-        }
-
-        void main() {
-            // Common
-            // Texture sample
-            vec3 s = texture2D(uMap, vUv).rgb;
-
-            // Signed distance
-            float sigDist = median(s.r, s.g, s.b) - 0.5;
-
-            float afwidth = 1.4142135623730951 / 2.0;
-
-            #ifdef IS_SMALL
-                float alpha = smoothstep(uThreshold - afwidth, uThreshold + afwidth, sigDist);
-            #else
-                float alpha = clamp(sigDist / fwidth(sigDist) + 0.5, 0.0, 1.0);
-            #endif
-
-            // Strokes
-            // Outset
-            float sigDistOutset = sigDist + uStrokeOutsetWidth * 0.5;
-
-            // Inset
-            float sigDistInset = sigDist - uStrokeInsetWidth * 0.5;
-
-            #ifdef IS_SMALL
-                float outset = smoothstep(uThreshold - afwidth, uThreshold + afwidth, sigDistOutset);
-                float inset = 1.0 - smoothstep(uThreshold - afwidth, uThreshold + afwidth, sigDistInset);
-            #else
-                float outset = clamp(sigDistOutset / fwidth(sigDistOutset) + 0.5, 0.0, 1.0);
-                float inset = 1.0 - clamp(sigDistInset / fwidth(sigDistInset) + 0.5, 0.0, 1.0);
-            #endif
-
-            // Border
-            float border = outset * inset;
-
-            // Alpha Test
-            if (alpha < uAlphaTest) discard;
-
-            // Output: Common
-            vec4 filledFragColor = vec4(uColor, uOpacity * alpha);
-
-            // Output: Strokes
-            vec4 strokedFragColor = vec4(uStrokeColor, uOpacity * border);
-
-            gl_FragColor = filledFragColor;
-        }
-    `,
+      vertexShader: vertex,
+      fragmentShader: fragment,
     });
+
     this.material.uniforms.uMap.value = this.atlas;
   }
 
@@ -196,13 +73,83 @@ export default class Title {
   }
 
   createMesh() {
-    const scale = 0.5;
+    const scale = this.screen.width * 0.00175;
 
-    const mesh = new THREE.Mesh(this.geometry, this.material);
-    mesh.rotation.x = Math.PI;
-    mesh.position.x = (-this.geometry.layout.width / 2) * scale;
-    mesh.scale.set(scale, scale, scale);
+    this.mesh = new THREE.Mesh(this.geometry, this.material);
 
-    this.scene.add(mesh);
+    this.mesh.rotation.x = Math.PI;
+    this.mesh.position.x = -this.viewport.width / 2;
+    this.mesh.position.y =
+      -this.viewport.height / 2 + this.viewport.height * 0.2;
+    this.mesh.position.z = 0.01;
+    this.mesh.scale.set(scale, scale, scale);
+
+    this.scene.add(this.mesh);
+  }
+
+  /**
+   * Events.
+   */
+  onResize({ screen, viewport }) {
+    this.screen = screen;
+    this.viewport = viewport;
+
+    if (this.mesh) {
+      const scale = this.screen.width * 0.00175;
+
+      this.mesh.position.x = -this.viewport.width / 2;
+      this.mesh.position.y =
+        -this.viewport.height / 2 + this.viewport.height * 0.2;
+      this.mesh.scale.set(scale, scale, scale);
+    }
+  }
+
+  /**
+   * Update.
+   */
+  update(percent) {
+    const percentAbsolute = Math.abs(percent);
+
+    if (this.material) {
+      this.material.uniforms.uAlpha.value = map(percentAbsolute, 0.25, 1, 1, 0);
+
+      this.material.uniforms.uDistortion.value = clamp(
+        0,
+        5,
+        map(percentAbsolute, 0, 1, 0, 5)
+      );
+
+      this.mesh.position.x =
+        -this.viewport.width / 2 + map(percent, -1.25, 1.25, 75, -75);
+      this.mesh.position.z = map(percent, -1.25, 1.25, 50, -50);
+
+      this.mesh.rotation.x = map(
+        percent,
+        -1.25,
+        1.25,
+        Math.PI + Math.PI / 8,
+        Math.PI - Math.PI / 8
+      );
+    }
+  }
+
+  /**
+   * Destroy.
+   */
+  destroyGeometry() {
+    if (this.geometry) {
+      this.geometry.dispose();
+    }
+  }
+
+  destroyMaterial() {
+    if (this.material) {
+      this.material.dispose();
+    }
+  }
+
+  destroy() {
+    this.destroyGeometry();
+    this.destroyMaterial();
   }
 }

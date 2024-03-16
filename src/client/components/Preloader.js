@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import imagesLoaded from 'imagesloaded';
 import { map } from 'lodash';
 
@@ -12,6 +13,7 @@ export default class Preloader extends Component {
 
     this.loadedTextureUrl = [];
     window.TEXTURES = {};
+    window.TITLE = {};
 
     this.textureLoader = new THREE.TextureLoader();
   }
@@ -31,6 +33,7 @@ export default class Preloader extends Component {
     );
 
     const textureLoader = new THREE.TextureLoader();
+    const fontLoader = new FontLoader();
 
     const preloadTextures = Promise.all(
       [...desktopImages].map(
@@ -44,7 +47,34 @@ export default class Preloader extends Component {
       )
     );
 
-    Promise.all([preloadImages, preloadTextures]).then(() => {
+    const loadFontAtlas = (path) => {
+      const promise = new Promise((resolve) => {
+        textureLoader.load(path, (atlas) => {
+          window.TITLE.atlas = atlas;
+          resolve();
+        });
+      });
+
+      return promise;
+    };
+
+    const loadFont = (path) => {
+      const promise = new Promise((resolve) => {
+        fontLoader.load(path, (font) => {
+          window.TITLE.font = font;
+          resolve();
+        });
+      });
+
+      return promise;
+    };
+
+    Promise.all([
+      preloadImages,
+      preloadTextures,
+      loadFontAtlas('/ApercuPro-Regular.png'),
+      loadFont('/ApercuPro-Regular-msdf.json'),
+    ]).then(() => {
       this.onPreloaded();
     });
   }

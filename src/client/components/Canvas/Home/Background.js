@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 import gsap from 'gsap';
 
-import fragment from '../../../shaders/fragment.glsl';
-import vertex from '../../../shaders/vertex.glsl';
-import { clamp, map } from '../../../utils/math';
+import fragment from '../../../shaders/image-fragment.glsl';
+import vertex from '../../../shaders/image-vertex.glsl';
+import { map } from '../../../utils/math';
 
 export default class Background {
   constructor({ scene, geometry, screen, viewport, texture, index }) {
@@ -36,7 +36,7 @@ export default class Background {
         uDisplacementX: { value: 0 },
         uDisplacementY: { value: 0 },
         uDistortion: { value: 0 },
-        uDirstortionX: { value: 1.75 },
+        uDistortionX: { value: 1.75 },
         uDistortionY: { value: 2 },
         uScale: { value: 0 },
         uTime: { value: 0 },
@@ -96,16 +96,10 @@ export default class Background {
   update(percent, time) {
     const percentAbsolute = Math.abs(percent);
 
-    this.material.uniforms.uDistortion.value = clamp(
-      0,
-      5,
-      map(percentAbsolute, 0, 1, 0, 5)
-    );
-    this.material.uniforms.uScale.value = clamp(
-      0,
-      0.5,
-      map(percentAbsolute, 0, 1, 0, 0.5)
-    );
+    this.material.uniforms.uDistortion.value = map(percentAbsolute, 0, 1, 0, 5);
+
+    this.material.uniforms.uScale.value = map(percentAbsolute, 0, 1, 0, 0.5);
+
     this.material.uniforms.uTime.value += time * 0.75;
 
     this.mesh.position.z = map(percentAbsolute, 0, 1, -0.01, -50);

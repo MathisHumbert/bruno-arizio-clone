@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import gsap from 'gsap';
 
-import fragment from '../../shaders/fragment.glsl';
-import vertex from '../../shaders/vertex.glsl';
+// import fragment from '../../shaders/fragment.glsl';
+// import vertex from '../../shaders/vertex.glsl';
 
 export default class Media {
   constructor({ element, scene, geometry, screen, viewport }) {

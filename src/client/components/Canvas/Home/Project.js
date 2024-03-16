@@ -36,10 +36,8 @@ export default class Project {
   createTitle() {
     this.title = new Title({
       scene: this.group,
-      geometry: this.geometry,
       screen: this.screen,
       viewport: this.viewport,
-      texture: this.texture,
       name: this.name,
       index: this.index,
     });
@@ -56,6 +54,10 @@ export default class Project {
 
     if (this.background && this.background.onResize) {
       this.background.onResize({ screen, viewport });
+    }
+
+    if (this.title && this.title.onResize) {
+      this.title.onResize({ screen, viewport });
     }
   }
 
@@ -96,6 +98,10 @@ export default class Project {
 
     if (this.background && this.background.update) {
       this.background.update(percent, time);
+    }
+
+    if (this.title && this.title.update) {
+      this.title.update(percent);
     }
   }
 
