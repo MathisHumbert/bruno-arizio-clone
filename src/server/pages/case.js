@@ -26,10 +26,14 @@ export function renderCase(data) {
             <div class="case__content__wrapper">
               <section class="case__information">
                 <div class="case__information__columns">
-                  <p class="case__information__text">${project.data.label}</p>
-                  <p class="case__information__text">/ ${project.data.year}</p>
+                  <p class="case__information__text" data-animation="text">${
+                    project.data.label
+                  }</p>
+                  <p class="case__information__text" data-animation="text">/ ${
+                    project.data.year
+                  }</p>
                 </div>
-                <p class="case__information__description">
+                <p class="case__information__description" data-animation="text">
                   ${project.data.description}
                 </p>
               </section>

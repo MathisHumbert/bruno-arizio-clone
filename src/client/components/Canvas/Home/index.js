@@ -203,4 +203,16 @@ export default class Home extends EventEmitter {
 
     this.scroll.last = this.scroll.current;
   }
+
+  /**
+   * Destroy.
+   */
+
+  destroy() {
+    each(this.projects, (project) => {
+      if (project && project.destroy) {
+        project.destroy();
+      }
+    });
+  }
 }

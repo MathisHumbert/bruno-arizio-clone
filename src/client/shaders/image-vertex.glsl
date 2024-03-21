@@ -5,8 +5,6 @@ uniform float uDistortionY;
 varying vec2 vUv;
 
 void main(){
-  vUv = uv;
-
   vec3 newPosition = position;
 
   float distanceX = length(position.x) / 50.;
@@ -18,4 +16,6 @@ void main(){
   newPosition.z -= uDistortion * max(distanceXPow + distanceYPow, 2.2);
 
   gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.);
+
+  vUv = uv;
 }

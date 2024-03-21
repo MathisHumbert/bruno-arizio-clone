@@ -109,6 +109,14 @@ export default class Project {
    * Destroy.
    */
   destroy() {
-    // destroy group
+    if (this.background && this.background.destroy) {
+      this.background.destroy();
+    }
+
+    if (this.title && this.title.destroy) {
+      this.title.destroy();
+    }
+
+    this.scene.remove(this.group);
   }
 }

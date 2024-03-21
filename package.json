@@ -37,6 +37,7 @@
     "nodelist-foreach-polyfill": "^1.2.0",
     "normalize-wheel": "^1.0.1",
     "prefix": "^1.0.0",
+    "split-type": "^0.3.4",
     "three": "^0.161.0",
     "three-msdf-text-utils": "^1.1.7",
     "ua-parser-js": "^1.0.37",

@@ -100,7 +100,7 @@ export default class App {
   onPreloaded() {
     this.onResize();
 
-    this.canvas.onPreloaded();
+    this.canvas.onPreloaded(this.page.index);
 
     this.page.show();
   }
@@ -108,7 +108,7 @@ export default class App {
   onLoaded() {
     this.onResize();
 
-    this.canvas.onLoaded(this.template);
+    this.canvas.onLoaded(this.template, this.previousTemplate, this.page.index);
 
     this.page.show();
   }
@@ -126,9 +126,9 @@ export default class App {
     this.url = url;
     this.isLoading = true;
 
-    this.canvas.onChangeStart(this.template, url);
-
     await this.page.hide();
+
+    this.canvas.onChangeStart(this.template, url);
 
     const request = await window.fetch(url);
 
@@ -141,6 +141,8 @@ export default class App {
       if (push) {
         window.history.pushState({}, '', url);
       }
+
+      this.previousTemplate = this.template;
 
       const divContent = div.querySelector('.content');
       this.template = divContent.getAttribute('data-template');
@@ -229,7 +231,7 @@ export default class App {
     this.odlElapsedTime = elapsedTime;
 
     if (this.page && this.page.update) {
-      this.page.update();
+      this.page.update(deltaTime);
     }
 
     if (this.canvas && this.canvas.update) {

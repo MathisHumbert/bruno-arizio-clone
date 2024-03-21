@@ -6,7 +6,9 @@ import gsap from 'gsap';
 
 import AsyncLoad from '../classes/AsyncLoad';
 import { Detection } from '../classes/Detection';
-import Highlight from '../animations/Highlight';
+
+import Text from '../animations/Text';
+
 import { clamp, lerp } from '../utils/math';
 import { mapEach } from '../utils/dom';
 import { COLOR_GRAY, COLOR_WHITE } from '../utils/colors';
@@ -25,7 +27,7 @@ export default class Page extends EventEmitter {
         preloaders: '[data-src]',
         pagePreloaders: '[data-page-src]',
 
-        animationsHighlights: '[data-animation="highlight"]',
+        animationsTexts: '[data-animation="text"]',
 
         ...elements,
       },
@@ -90,16 +92,13 @@ export default class Page extends EventEmitter {
    */
   createAnimations() {
     /**
-     * Highlight.
+     * Text.
      */
-    this.animationsHighlight = mapEach(
-      this.elements.animationsHighlights,
-      (element) => {
-        return new Highlight({ element });
-      }
-    );
+    this.animationsText = mapEach(this.elements.animationsTexts, (element) => {
+      return new Text({ element });
+    });
 
-    this.animations.push(...this.animationsHighlight);
+    this.animations.push(...this.animationsText);
   }
 
   /**
@@ -159,12 +158,10 @@ export default class Page extends EventEmitter {
     this.transform(this.elements.wrapper, this.scroll.current);
   }
 
-  show() {
+  show(animation) {
     this.reset();
 
     each(this.animations, (animation) => animation.createAnimation());
-
-    this.isVisible = true;
 
     this.addEventListeners();
 
@@ -180,7 +177,19 @@ export default class Page extends EventEmitter {
       });
     }
 
-    return Promise.resolve();
+    if (animation) {
+      return new Promise((resolve) => {
+        animation.call(() => {
+          this.isVisible = true;
+
+          resolve();
+        });
+      });
+    } else {
+      this.isVisible = true;
+
+      return Promise.resolve();
+    }
   }
 
   hide() {

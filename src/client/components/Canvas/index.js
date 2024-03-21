@@ -3,12 +3,15 @@ import EventEmitter from 'events';
 
 import Home from './Home';
 import About from './About';
+import Case from './Case';
 
 export default class Canvas extends EventEmitter {
   constructor({ template }) {
     super();
 
     this.template = template;
+    this.currentPage = null;
+    this.previousPage = null;
     this.index = 0;
 
     this.createScene();
@@ -91,14 +94,34 @@ export default class Canvas extends EventEmitter {
   }
 
   /**
-   * Events.
+   * Case.
    */
-  onPreloaded() {
-    this.onChangeEnd(this.template);
+  createCase() {
+    this.case = new Case({
+      scene: this.scene,
+      geometry: this.geometry,
+      screen: this.screen,
+      viewport: this.viewport,
+      index: this.index,
+    });
   }
 
-  onLoaded(template) {
-    this.onChangeEnd(template);
+  destroyCase() {
+    if (!this.case) return;
+
+    this.case.destroy();
+    this.case = null;
+  }
+
+  /**
+   * Events.
+   */
+  onPreloaded(index) {
+    this.onChangeEnd(this.template, null, index);
+  }
+
+  onLoaded(template, previousTemplate, index) {
+    this.onChangeEnd(template, previousTemplate, index);
   }
 
   onChangeStart() {
@@ -109,15 +132,30 @@ export default class Canvas extends EventEmitter {
     if (this.about) {
       this.about.hide();
     }
+
+    if (this.case) {
+      this.case.hide();
+    }
   }
 
-  onChangeEnd(template) {
+  onChangeEnd(template, previousTemplate, index) {
+    this.previousPage = this.currentPage;
+    this.currentPage = null;
+
+    if (index !== undefined) {
+      this.onIndexChange(index);
+    }
+
     if (this.home) {
       this.destroyHome();
     }
 
     if (this.about) {
       this.destroyAbout();
+    }
+
+    if (this.case) {
+      this.destroyCase();
     }
 
     if (template === 'home') {
@@ -130,7 +168,13 @@ export default class Canvas extends EventEmitter {
       this.createAbout();
     }
 
-    this.template = template;
+    if (template === 'case') {
+      this.createCase();
+
+      this.case.show(previousTemplate);
+    }
+
+    this.currentPage = template;
   }
 
   onResize() {
@@ -157,6 +201,10 @@ export default class Canvas extends EventEmitter {
 
     if (this.about && this.about.onResize) {
       this.about.onResize({ screen: this.screen, viewport: this.viewport });
+    }
+
+    if (this.case && this.case.onResize) {
+      this.case.onResize({ screen: this.screen, viewport: this.viewport });
     }
   }
 

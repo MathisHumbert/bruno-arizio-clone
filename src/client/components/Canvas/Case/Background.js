@@ -3,7 +3,6 @@ import gsap from 'gsap';
 
 import fragment from '../../../shaders/image-fragment.glsl';
 import vertex from '../../../shaders/image-vertex.glsl';
-import { map } from '../../../utils/math';
 
 export default class Background {
   constructor({ scene, geometry, screen, viewport, texture, index }) {
@@ -13,8 +12,6 @@ export default class Background {
     this.viewport = viewport;
     this.texture = texture;
     this.index = index;
-
-    this.location = this.viewport.height * 1.33 * this.index * -1;
 
     this.createMaterial();
     this.createMesh();
@@ -61,6 +58,41 @@ export default class Background {
   }
 
   /**
+   * Animations.
+   */
+  show(previousTemplate) {
+    if (previousTemplate !== 'home' && previousTemplate !== 'index') {
+      const tl = gsap.timeline({
+        defaults: { ease: 'power4.out', duration: 2 },
+      });
+
+      tl.fromTo(
+        this.mesh.position,
+        {
+          y: -this.viewport.height * 1.33,
+          z: -50,
+        },
+        { y: 0, z: 0 }
+      )
+        .fromTo(
+          this.material.uniforms.uDisplacementY,
+          { value: 0.01 },
+          { value: 0 },
+          0
+        )
+        .fromTo(
+          this.material.uniforms.uDistortion,
+          { value: 5 },
+          { value: 0 },
+          0
+        )
+        .fromTo(this.material.uniforms.uScale, { value: 0.5 }, { value: 0 }, 0);
+    }
+  }
+
+  hide() {}
+
+  /**
    * Events.
    */
   onResize({ screen, viewport }) {
@@ -74,37 +106,6 @@ export default class Background {
       this.screen.width,
       this.screen.height
     );
-  }
-
-  onTouchStart() {
-    gsap.to(this.material.uniforms.uDisplacementY, {
-      value: 0.1,
-      duration: 0.4,
-    });
-  }
-
-  onTouchEnd() {
-    gsap.killTweensOf(this.material.uniforms.uDisplacementY);
-
-    gsap.to(this.material.uniforms.uDisplacementY, {
-      value: 0,
-      duration: 0.4,
-    });
-  }
-
-  /**
-   * Loop.
-   */
-  update(percent, time) {
-    const percentAbsolute = Math.abs(percent);
-
-    this.material.uniforms.uDistortion.value = map(percentAbsolute, 0, 1, 0, 5);
-
-    this.material.uniforms.uScale.value = map(percentAbsolute, 0, 1, 0, 0.5);
-
-    this.material.uniforms.uTime.value += time * 0.75;
-
-    this.mesh.position.z = map(percentAbsolute, 0, 1, -0.01, -50);
   }
 
   /**
