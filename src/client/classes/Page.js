@@ -159,8 +159,6 @@ export default class Page extends EventEmitter {
   }
 
   show(animation) {
-    this.reset();
-
     each(this.animations, (animation) => animation.createAnimation());
 
     this.addEventListeners();
@@ -192,14 +190,24 @@ export default class Page extends EventEmitter {
     }
   }
 
-  hide() {
+  hide(animation) {
     this.isVisible = false;
 
     this.removeEventListeners();
 
     each(this.animations, (animation) => animation.destroyAnimation());
 
-    return Promise.resolve();
+    this.reset();
+
+    if (animation) {
+      return new Promise((resolve) => {
+        animation.call(() => {
+          resolve();
+        });
+      });
+    } else {
+      return Promise.resolve();
+    }
   }
 
   transform(element, y) {

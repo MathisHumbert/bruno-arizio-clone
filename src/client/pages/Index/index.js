@@ -9,6 +9,7 @@ export default class Index extends Page {
       elements: {
         wrapper: '.index__wrapper',
       },
+      isScrollable: false,
     });
   }
 

@@ -90,7 +90,24 @@ export default class Background {
     }
   }
 
-  hide() {}
+  async hide(nextTemplate) {
+    if (nextTemplate === 'case') {
+      return new Promise((res) => {
+        const tl = gsap.timeline({
+          defaults: { ease: 'power4.out', duration: 2 },
+          onComplete: () => {
+            res();
+            this.destroy();
+          },
+        });
+
+        tl.to(this.mesh.position, { y: this.viewport.height * 1.33 })
+          .to(this.material.uniforms.uDisplacementY, { value: 0.01 }, 0)
+          .to(this.material.uniforms.uDistortion, { value: 5 }, 0)
+          .to(this.material.uniforms.uScale, { value: 0.5 }, 0);
+      });
+    }
+  }
 
   /**
    * Events.

@@ -75,11 +75,11 @@ export default class Preloader extends Component {
       loadFontAtlas('/ApercuPro-Regular.png'),
       loadFont('/ApercuPro-Regular-msdf.json'),
     ]).then(() => {
-      this.onPreloaded();
+      this.emit('preloaded');
     });
   }
 
-  load(content) {
+  async load(content) {
     const images = content.querySelectorAll('img');
 
     if (!this.loadedTextureUrl.includes(window.location.pathname)) {
@@ -103,23 +103,19 @@ export default class Preloader extends Component {
         )
       );
 
-      Promise.all([loadImages, loadTextures]).then(() => {
-        this.onLoaded();
+      return new Promise((res) => {
+        Promise.all([loadImages, loadTextures]).then(() => {
+          res();
+        });
       });
     } else {
       const imgLoaded = imagesLoaded(content);
 
-      imgLoaded.on('done', () => {
-        this.onLoaded();
+      return new Promise((res) => {
+        imgLoaded.on('done', () => {
+          res();
+        });
       });
     }
-  }
-
-  onPreloaded() {
-    this.emit('preloaded');
-  }
-
-  onLoaded() {
-    this.emit('loaded');
   }
 }

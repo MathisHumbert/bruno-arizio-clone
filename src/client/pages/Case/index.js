@@ -52,7 +52,13 @@ export default class Case extends Page {
   }
 
   async hide() {
-    return super.hide();
+    const tl = gsap.timeline();
+
+    tl.to(this.elements.wrapper, { y: 0, duration: 1.75, ease: 'power4.out' })
+      .to(this.elements.headerButton, { autoAlpha: 0 }, 'start')
+      .to(this.element, { autoAlpha: 0 }, 'start');
+
+    return super.hide(tl);
   }
 
   /**

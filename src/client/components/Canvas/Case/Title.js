@@ -59,6 +59,9 @@ export default class Title {
         uLinesTotal: { value: this.geometry.layout.linesTotal },
         uLettersTotal: { value: this.geometry.layout.lettersTotal },
         uWordsTotal: { value: this.geometry.layout.wordsTotal },
+        uTransition: {
+          value: 1,
+        },
       },
       vertexShader: vertex,
       fragmentShader: fragment,
@@ -96,7 +99,7 @@ export default class Title {
         this.mesh.position,
         { y: -this.viewport.height },
         {
-          y: -(this.geometry.layout.height / 4) * this.scale,
+          y: -(this.geometry.layout.height / 3) * this.scale,
           duration: 2,
           ease: 'power4.out',
         }
@@ -104,7 +107,23 @@ export default class Title {
     }
   }
 
-  hide() {}
+  hide(nextTemplate) {
+    if (nextTemplate === 'case') {
+      return new Promise((res) => {
+        const tl = gsap.timeline({
+          defaults: { ease: 'power4.out', duration: 2 },
+          onComplete: () => {
+            res();
+            this.destroy();
+          },
+        });
+
+        tl.to(this.mesh.position, {
+          y: this.viewport.height,
+        });
+      });
+    }
+  }
 
   /**
    * Events.

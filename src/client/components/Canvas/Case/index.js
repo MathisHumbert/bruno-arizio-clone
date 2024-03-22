@@ -54,14 +54,22 @@ export default class Case {
     }
   }
 
-  hide() {
+  hide(nextTemplate) {
+    const promises = [];
+
     if (this.background && this.background.hide) {
-      this.background.hide();
+      const promise = this.background.hide(nextTemplate);
+
+      promises.push(promise);
     }
 
     if (this.title && this.title.hide) {
-      this.title.hide();
+      const promise = this.title.hide(nextTemplate);
+
+      promises.push(promise);
     }
+
+    return Promise.all(promises);
   }
 
   /**

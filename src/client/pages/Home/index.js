@@ -15,6 +15,7 @@ export default class Home extends Page {
         projects: '.home__project',
         paginationNumber: '.home__pagination__number',
       },
+      isScrollable: false,
     });
   }
 

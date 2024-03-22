@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import EventEmitter from 'events';
 
 import Home from './Home';
-import About from './About';
+import Index from './Index/index';
 import Case from './Case';
 
 export default class Canvas extends EventEmitter {
@@ -75,10 +75,10 @@ export default class Canvas extends EventEmitter {
   }
 
   /**
-   * About.
+   * Index.
    */
-  createAbout() {
-    this.about = new About({
+  createIndex() {
+    this.index = new Index({
       scene: this.scene,
       geometry: this.geometry,
       screen: this.screen,
@@ -86,11 +86,11 @@ export default class Canvas extends EventEmitter {
     });
   }
 
-  destroyAbout() {
-    if (!this.about) return;
+  destroyIndex() {
+    if (!this.index) return;
 
-    this.about.destroy();
-    this.about = null;
+    this.index.destroy();
+    this.index = null;
   }
 
   /**
@@ -116,29 +116,15 @@ export default class Canvas extends EventEmitter {
   /**
    * Events.
    */
-  onPreloaded(index) {
-    this.onChangeEnd(this.template, null, index);
+  async onPreloaded(index) {
+    await this.onChange(this.template, null, index);
   }
 
-  onLoaded(template, previousTemplate, index) {
-    this.onChangeEnd(template, previousTemplate, index);
+  async onLoaded(template, previousTemplate, index) {
+    await this.onChange(template, previousTemplate, index);
   }
 
-  onChangeStart() {
-    if (this.home) {
-      this.home.hide();
-    }
-
-    if (this.about) {
-      this.about.hide();
-    }
-
-    if (this.case) {
-      this.case.hide();
-    }
-  }
-
-  onChangeEnd(template, previousTemplate, index) {
+  async onChange(template, previousTemplate, index) {
     this.previousPage = this.currentPage;
     this.currentPage = null;
 
@@ -146,35 +132,43 @@ export default class Canvas extends EventEmitter {
       this.onIndexChange(index);
     }
 
-    if (this.home) {
-      this.destroyHome();
-    }
+    return new Promise(async (res) => {
+      if (this.home) {
+        await this.home.hide();
+      }
 
-    if (this.about) {
-      this.destroyAbout();
-    }
+      if (this.index) {
+        await this.index.hide();
+      }
 
-    if (this.case) {
-      this.destroyCase();
-    }
+      if (this.case) {
+        await this.case.hide(template);
+      }
 
-    if (template === 'home') {
-      this.createHome();
+      this.currentPage = template;
 
-      this.home.on('change', (index) => this.onIndexChange(index));
-    }
+      // if (this.currentPage && template !== previousTemplate) {
+      //   console.log('create transition');
+      // }
 
-    if (template === 'about') {
-      this.createAbout();
-    }
+      if (template === 'home') {
+        this.createHome();
 
-    if (template === 'case') {
-      this.createCase();
+        this.home.on('change', (index) => this.onIndexChange(index));
+      }
 
-      this.case.show(previousTemplate);
-    }
+      if (template === 'index') {
+        this.createIndex();
+      }
 
-    this.currentPage = template;
+      if (template === 'case') {
+        this.createCase();
+
+        this.case.show(previousTemplate);
+      }
+
+      res();
+    });
   }
 
   onResize() {
@@ -199,8 +193,8 @@ export default class Canvas extends EventEmitter {
       this.home.onResize({ screen: this.screen, viewport: this.viewport });
     }
 
-    if (this.about && this.about.onResize) {
-      this.about.onResize({ screen: this.screen, viewport: this.viewport });
+    if (this.index && this.index.onResize) {
+      this.index.onResize({ screen: this.screen, viewport: this.viewport });
     }
 
     if (this.case && this.case.onResize) {
@@ -212,11 +206,19 @@ export default class Canvas extends EventEmitter {
     if (this.home && this.home.onTouchDown) {
       this.home.onTouchDown(event);
     }
+
+    if (this.index && this.index.onTouchDown) {
+      this.index.onTouchDown(event);
+    }
   }
 
   onTouchMove(event) {
     if (this.home && this.home.onTouchMove) {
       this.home.onTouchMove(event);
+    }
+
+    if (this.index && this.index.onTouchMove) {
+      this.index.onTouchMove(event);
     }
   }
 
@@ -224,11 +226,19 @@ export default class Canvas extends EventEmitter {
     if (this.home && this.home.onTouchUp) {
       this.home.onTouchUp();
     }
+
+    if (this.index && this.index.onTouchUp) {
+      this.index.onTouchUp();
+    }
   }
 
   onWheel(normalized) {
     if (this.home && this.home.onWheel) {
       this.home.onWheel(normalized);
+    }
+
+    if (this.index && this.index.onWheel) {
+      this.index.onWheel(normalized);
     }
   }
 
@@ -246,8 +256,8 @@ export default class Canvas extends EventEmitter {
       this.home.update(deltaTime);
     }
 
-    if (this.about && this.about.update) {
-      this.about.update(scroll);
+    if (this.index && this.index.update) {
+      this.index.update();
     }
 
     this.renderer.render(this.scene, this.camera);

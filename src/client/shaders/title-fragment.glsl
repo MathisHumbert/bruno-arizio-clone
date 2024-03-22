@@ -12,6 +12,7 @@ uniform float uAlphaTest;
 uniform vec3 uColor;
 uniform sampler2D uMap;
 uniform float uAlpha;
+uniform float uTransition;
 
 // Uniforms: Strokes
 uniform vec3 uStrokeColor;
@@ -65,7 +66,7 @@ void main() {
   vec4 filledFragColor = vec4(uColor, alpha * mix(1., 0., (vLineLetterIndex + 2.0) / vLineLettersTotal * (vLineLettersTotal - vLineLettersTotal * uAlpha)));
 
   // Output: Strokes
-  vec4 strokedFragColor = vec4(uStrokeColor, uOpacity * border);
+  vec4 strokedFragColor = vec4(uColor, uOpacity * border);
 
-  gl_FragColor = filledFragColor;
+  gl_FragColor = mix(strokedFragColor, filledFragColor, uTransition);
 }

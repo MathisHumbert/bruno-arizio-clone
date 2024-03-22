@@ -1,9 +1,10 @@
 import * as THREE from 'three';
 import { MSDFTextGeometry, uniforms } from 'three-msdf-text-utils';
+import gsap from 'gsap';
 
 import fragment from '../../../shaders/title-fragment.glsl';
 import vertex from '../../../shaders/title-vertex.glsl';
-import { clamp, map } from '../../../utils/math';
+import { lerp } from '../../../utils/math';
 
 export default class Title {
   constructor({ scene, screen, viewport, name, index }) {
@@ -15,6 +16,7 @@ export default class Title {
 
     this.atlas = window.TITLE.atlas;
     this.font = window.TITLE.font;
+    this.transition = 0;
 
     this.createGeometry();
     this.createMaterial();
@@ -45,7 +47,7 @@ export default class Title {
 
         // Custom
         uDistortion: {
-          value: 1,
+          value: 0,
         },
         uDistortionX: {
           value: 1.75,
@@ -60,13 +62,12 @@ export default class Title {
         uLettersTotal: { value: this.geometry.layout.lettersTotal },
         uWordsTotal: { value: this.geometry.layout.wordsTotal },
         uTransition: {
-          value: 1,
+          value: 0,
         },
       },
       vertexShader: vertex,
       fragmentShader: fragment,
     });
-
     this.material.uniforms.uMap.value = this.atlas;
   }
 
@@ -78,19 +79,29 @@ export default class Title {
   }
 
   createMesh() {
-    const scale = this.screen.width * 0.00175;
+    this.scale = this.screen.width * 0.00065;
+    this.height = this.scale * this.geometry.layout.height;
+    this.padding = this.geometry.layout.height / 4;
 
     this.mesh = new THREE.Mesh(this.geometry, this.material);
 
     this.mesh.rotation.x = Math.PI;
-    this.mesh.position.x = -this.viewport.width / 2;
+    this.mesh.position.x = -this.viewport.width / 2.275;
     this.mesh.position.y =
-      -this.viewport.height / 2 + this.viewport.height * 0.2;
+      (-this.geometry.layout.height / 3) * this.scale -
+      (this.height + this.padding) * this.index;
     this.mesh.position.z = 0.01;
-    this.mesh.scale.set(scale, scale, scale);
+    this.mesh.scale.set(this.scale, this.scale, this.scale);
 
     this.scene.add(this.mesh);
   }
+
+  /**
+   * Animations.
+   */
+  show(previousTemplate) {}
+
+  hide(nextTemplate) {}
 
   /**
    * Events.
@@ -99,43 +110,32 @@ export default class Title {
     this.screen = screen;
     this.viewport = viewport;
 
-    if (this.mesh) {
-      const scale = this.screen.width * 0.00175;
+    this.scale = this.screen.width * 0.00065;
+    this.height = this.scale * this.geometry.layout.height;
+    this.padding = this.geometry.layout.height / 4;
 
-      this.mesh.position.x = -this.viewport.width / 2;
-      this.mesh.position.y =
-        -this.viewport.height / 2 + this.viewport.height * 0.2;
-      this.mesh.scale.set(scale, scale, scale);
-    }
+    this.mesh.position.x = -this.viewport.width / 2.275;
+    this.mesh.position.y =
+      (-this.geometry.layout.height / 3) * this.scale -
+      (this.height + this.padding) * this.index;
+    this.mesh.scale.set(this.scale, this.scale, this.scale);
+  }
+
+  set(isCurrent) {
+    this.transition = isCurrent ? 1 : 0;
   }
 
   /**
-   * Update.
+   * Loop.
    */
-  update(percent) {
-    const percentAbsolute = Math.abs(percent);
-
-    if (this.material) {
-      this.material.uniforms.uAlpha.value = map(percentAbsolute, 0.25, 1, 1, 0);
-
-      this.material.uniforms.uDistortion.value = clamp(
-        0,
-        5,
-        map(percentAbsolute, 0, 1, 0, 5)
-      );
-
-      this.mesh.position.x =
-        -this.viewport.width / 2 + map(percent, -1.25, 1.25, 75, -75);
-      this.mesh.position.z = map(percent, -1.25, 1.25, 50, -50);
-
-      this.mesh.rotation.x = map(
-        percent,
-        -1.25,
-        1.25,
-        Math.PI + Math.PI / 8,
-        Math.PI - Math.PI / 8
-      );
-    }
+  update() {
+    this.material.uniforms.uTransition.value = Number(
+      lerp(
+        this.material.uniforms.uTransition.value,
+        this.transition,
+        0.1
+      ).toFixed(2)
+    );
   }
 
   /**

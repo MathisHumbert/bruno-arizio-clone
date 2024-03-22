@@ -88,29 +88,37 @@ export default class App {
     this.preloader.on('preloaded', () => this.onPreloaded());
   }
 
-  createLoader() {
-    this.preloader.load(this.content);
+  async createLoader() {
+    return new Promise(async (res) => {
+      await this.preloader.load(this.content);
 
-    this.preloader.on('loaded', () => this.onLoaded());
+      await this.onLoaded(res);
+    });
   }
 
   /**
    * Events.
    */
-  onPreloaded() {
+  async onPreloaded() {
     this.onResize();
 
-    this.canvas.onPreloaded(this.page.index);
+    await this.canvas.onPreloaded(this.page.index);
 
     this.page.show();
   }
 
-  onLoaded() {
+  async onLoaded(res) {
     this.onResize();
 
-    this.canvas.onLoaded(this.template, this.previousTemplate, this.page.index);
+    await this.canvas.onLoaded(
+      this.template,
+      this.previousTemplate,
+      this.page.index
+    );
 
     this.page.show();
+
+    res();
   }
 
   onPopState() {
@@ -127,8 +135,6 @@ export default class App {
     this.isLoading = true;
 
     await this.page.hide();
-
-    this.canvas.onChangeStart(this.template, url);
 
     const request = await window.fetch(url);
 
@@ -154,7 +160,7 @@ export default class App {
 
       this.page.create();
 
-      this.createLoader();
+      await this.createLoader();
 
       this.addLinkListeners();
 
