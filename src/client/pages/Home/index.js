@@ -1,3 +1,4 @@
+import gsap from 'gsap';
 import { each } from 'lodash';
 
 import Page from '../../classes/Page';
@@ -25,11 +26,19 @@ export default class Home extends Page {
   async show(index = 0) {
     this.onCanvasChange(index);
 
-    return super.show();
+    const tl = gsap.timeline();
+
+    tl.to(this.element, { autoAlpha: 1 });
+
+    return super.show(tl);
   }
 
   async hide() {
-    return super.hide();
+    const tl = gsap.timeline();
+
+    tl.to(this.element, { autoAlpha: 0 });
+
+    return super.hide(tl);
   }
 
   /**

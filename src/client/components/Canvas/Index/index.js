@@ -1,14 +1,20 @@
-import { clamp, lerp } from '../../../utils/math';
+import * as THREE from 'three';
+import gsap from 'gsap';
+import { debounce, each } from 'lodash';
+
 import Background from './Background';
 import Titles from './Titles';
+import { clamp, lerp } from '../../../utils/math';
 
 export default class Index {
-  constructor({ scene, geometry, screen, viewport }) {
+  constructor({ scene, camera, geometry, screen, viewport, index }) {
     this.scene = scene;
+    this.camera = camera;
     this.geometry = geometry;
     this.screen = screen;
     this.viewport = viewport;
 
+    this.linkElements = document.querySelectorAll('.index__link');
     this.scroll = {
       position: 0,
       current: 0,
@@ -16,12 +22,14 @@ export default class Index {
       limit: 0,
       ease: 0.1,
     };
-    this.index = 0;
+    this.index = index;
+
+    this.onCheckDebounce = debounce(this.onCheck, 400);
 
     this.createTitles();
     this.createBackground();
 
-    this.set(0);
+    this.set(this.index);
   }
 
   createTitles() {
@@ -30,6 +38,8 @@ export default class Index {
       screen: this.screen,
       viewport: this.viewport,
     });
+
+    this.scroll.limit = this.titles.height * (this.titles.titles.length - 1);
   }
 
   createBackground() {
@@ -73,23 +83,43 @@ export default class Index {
 
   onTouchDown(event) {
     this.isDown = true;
+
+    this.scroll.position = this.scroll.current;
+    this.start = event.touches ? event.touches[0].clientY : event.clientY;
   }
 
   onTouchMove(event) {
     if (!this.isDown) return;
+
+    const y = event.touches ? event.touches[0].clientY : event.clientY;
+    const distance = this.start - y;
+
+    this.scroll.target = this.scroll.position + distance;
   }
 
   onTouchUp() {
     this.isDown = false;
+
+    this.onCheck();
   }
 
   onWheel(normalized) {
     const value = normalized.pixelY > 0 ? 1 : -1;
 
     this.scroll.target += this.titles.height * value;
+
+    this.onCheckDebounce();
+  }
+
+  onCheck() {
+    this.scroll.target = this.titles.height * this.index;
   }
 
   set(index) {
+    this.index = index;
+
+    this.scroll.target = this.scroll.current = this.titles.height * this.index;
+
     if (this.titles && this.titles.set) {
       this.titles.set(index);
     }
@@ -97,6 +127,8 @@ export default class Index {
     if (this.background && this.background.set) {
       this.background.set(index);
     }
+
+    this.calculate();
   }
 
   /**
@@ -114,6 +146,7 @@ export default class Index {
     }
 
     this.scroll.target = clamp(0, this.scroll.limit, this.scroll.target);
+
     this.scroll.current = lerp(
       this.scroll.current,
       this.scroll.target,
@@ -122,6 +155,12 @@ export default class Index {
 
     this.titles.group.position.y = this.scroll.current;
 
+    if (
+      this.titles.group.position.y.toFixed(3) !== this.scroll.target.toFixed(3)
+    ) {
+      this.calculate();
+    }
+
     if (this.titles && this.titles.update) {
       this.titles.update();
     }
@@ -129,5 +168,50 @@ export default class Index {
     if (this.background && this.background.update) {
       this.background.update(index);
     }
+  }
+
+  calculate() {
+    const position = new THREE.Vector3();
+    const box = new THREE.Box3();
+
+    each(this.titles.titles, (title, childIndex) => {
+      box.setFromObject(title.mesh);
+
+      const min = box.min.clone().project(this.camera);
+      const max = box.max.clone().project(this.camera);
+
+      const minX = (min.x / 2) * this.screen.width;
+      const maxX = (max.x / 2) * this.screen.width;
+
+      const minY = (min.y / 2) * this.screen.height;
+      const maxY = (max.y / 2) * this.screen.height;
+
+      const height = maxY - minY;
+      const width = maxX - minX;
+
+      title.mesh.updateMatrixWorld();
+      title.mesh.getWorldPosition(position);
+
+      position.project(this.camera);
+
+      position.x = Math.round(((position.x + 1) * this.screen.width) / 2);
+      position.y = Math.round(((-position.y + 1) * this.screen.height) / 2);
+      position.z = 0;
+
+      const link = this.linkElements[childIndex];
+
+      gsap.set(link, {
+        height,
+        width,
+        x: position.x,
+        y: position.y - height / 1.2,
+      });
+
+      if (this.index === childIndex) {
+        link.classList.add('index__link--active');
+      } else {
+        link.classList.remove('index__link--active');
+      }
+    });
   }
 }

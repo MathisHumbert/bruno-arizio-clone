@@ -78,19 +78,21 @@ export default class Canvas extends EventEmitter {
    * Index.
    */
   createIndex() {
-    this.index = new Index({
+    this.indexes = new Index({
       scene: this.scene,
+      camera: this.camera,
       geometry: this.geometry,
       screen: this.screen,
       viewport: this.viewport,
+      index: this.index,
     });
   }
 
   destroyIndex() {
-    if (!this.index) return;
+    if (!this.indexes) return;
 
-    this.index.destroy();
-    this.index = null;
+    this.indexes.destroy();
+    this.indexes = null;
   }
 
   /**
@@ -137,8 +139,8 @@ export default class Canvas extends EventEmitter {
         await this.home.hide();
       }
 
-      if (this.index) {
-        await this.index.hide();
+      if (this.indexes) {
+        await this.indexes.hide();
       }
 
       if (this.case) {
@@ -193,8 +195,8 @@ export default class Canvas extends EventEmitter {
       this.home.onResize({ screen: this.screen, viewport: this.viewport });
     }
 
-    if (this.index && this.index.onResize) {
-      this.index.onResize({ screen: this.screen, viewport: this.viewport });
+    if (this.indexes && this.indexes.onResize) {
+      this.indexes.onResize({ screen: this.screen, viewport: this.viewport });
     }
 
     if (this.case && this.case.onResize) {
@@ -207,8 +209,8 @@ export default class Canvas extends EventEmitter {
       this.home.onTouchDown(event);
     }
 
-    if (this.index && this.index.onTouchDown) {
-      this.index.onTouchDown(event);
+    if (this.indexes && this.indexes.onTouchDown) {
+      this.indexes.onTouchDown(event);
     }
   }
 
@@ -217,8 +219,8 @@ export default class Canvas extends EventEmitter {
       this.home.onTouchMove(event);
     }
 
-    if (this.index && this.index.onTouchMove) {
-      this.index.onTouchMove(event);
+    if (this.indexes && this.indexes.onTouchMove) {
+      this.indexes.onTouchMove(event);
     }
   }
 
@@ -227,8 +229,8 @@ export default class Canvas extends EventEmitter {
       this.home.onTouchUp();
     }
 
-    if (this.index && this.index.onTouchUp) {
-      this.index.onTouchUp();
+    if (this.indexes && this.indexes.onTouchUp) {
+      this.indexes.onTouchUp();
     }
   }
 
@@ -237,8 +239,8 @@ export default class Canvas extends EventEmitter {
       this.home.onWheel(normalized);
     }
 
-    if (this.index && this.index.onWheel) {
-      this.index.onWheel(normalized);
+    if (this.indexes && this.indexes.onWheel) {
+      this.indexes.onWheel(normalized);
     }
   }
 
@@ -256,8 +258,8 @@ export default class Canvas extends EventEmitter {
       this.home.update(deltaTime);
     }
 
-    if (this.index && this.index.update) {
-      this.index.update();
+    if (this.indexes && this.indexes.update) {
+      this.indexes.update();
     }
 
     this.renderer.render(this.scene, this.camera);
