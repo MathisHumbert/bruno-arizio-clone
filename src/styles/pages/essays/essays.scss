@@ -17,12 +17,16 @@
 .essays__title {
   @extend %animation;
 
-  font: 6.5rem/1.025 $font-apercu-pro-regular;
+  font: 9.5rem/1.025 $font-apercu-pro-regular;
   left: 0;
   letter-spacing: -0.2rem;
   padding-bottom: 5rem;
   padding-top: 5rem;
   position: relative;
+
+  span {
+    display: block;
+  }
 
   @include media('<small') {
     font-size: 3.2rem;

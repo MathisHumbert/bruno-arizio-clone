@@ -17,7 +17,7 @@
 .about__title {
   @extend %animation;
 
-  font: 10rem/1.17 $font-apercu-pro-regular;
+  font: 15rem/1.17 $font-apercu-pro-regular;
   letter-spacing: -0.15rem;
   margin-bottom: 15rem;
 
@@ -39,6 +39,7 @@
 
 .about__title__highlight__text {
   color: transparent;
+  position: relative;
 
   &:before {
     color: $color-black;
@@ -157,6 +158,10 @@
   align-items: baseline;
   display: flex;
   padding-right: 2rem;
+
+  span {
+    padding-right: 2rem;
+  }
 
   @include media('<small') {
     padding-right: 0.5rem;

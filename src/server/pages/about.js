@@ -18,37 +18,43 @@ export function renderAbout(data) {
           </div>
           <div class="about__columns">
             <div class="about__columns__column">
-              <h2 class="about__subtitle">${about.data.contact_title}</h2>
+              <h2 class="about__subtitle" data-animation="text">${
+                about.data.contact_title
+              }</h2>
               <p class="about__description">
               ${map(
                 about.data.contact_list,
                 (contact) => /*html*/ `
                 <span class="about__description__line">
-                  <a href="${contact.link.url}" class="about__link">${contact.text}</a>
+                  <a href="${contact.link.url}" class="about__link" data-animation="text">${contact.text}</a>
                 </span>
               `
               ).join('')}
               </p>
-              <h2 class="about__subtitle">${about.data.awards_title}</h2>
+              <h2 class="about__subtitle" data-animation="text">${
+                about.data.awards_title
+              }</h2>
               <p class="about__description">
               ${map(
                 about.data.awards_list,
                 (award) => /*html*/ `
                 <span class="about__description__line">
-                  <a  class="about__link">${award.text}</a>
+                  <a class="about__link" data-animation="text">${award.text}</a>
                 </span>
               `
               ).join('')}
               </p>
             </div>
             <div class="about__columns__column">
-              <h2 class="about__subtitle">${about.data.social_title}</h2>
+              <h2 class="about__subtitle"  data-animation="text">${
+                about.data.social_title
+              }</h2>
               <p class="about__description">
               ${map(
                 about.data.social_list,
                 (social) => /*html*/ `
                 <span class="about__description__line">
-                  <a href="${social.link.url}" class="about__link">${social.text}</a>
+                  <a href="${social.link.url}" class="about__link" data-animation="text">${social.text}</a>
                 </span>
               `
               ).join('')}
