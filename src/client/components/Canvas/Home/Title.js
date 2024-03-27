@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { MSDFTextGeometry, uniforms } from 'three-msdf-text-utils';
+import gsap from 'gsap';
 
 import fragment from '../../../shaders/title-fragment.glsl';
 import vertex from '../../../shaders/title-vertex.glsl';
@@ -15,6 +16,7 @@ export default class Title {
 
     this.atlas = window.TITLE.atlas;
     this.font = window.TITLE.font;
+    this.isAnimating = false;
 
     this.createGeometry();
     this.createMaterial();
@@ -78,7 +80,7 @@ export default class Title {
   }
 
   createMesh() {
-    const scale = this.screen.width * 0.00175;
+    const scale = this.screen.width * 0.0016;
 
     this.mesh = new THREE.Mesh(this.geometry, this.material);
 
@@ -93,49 +95,116 @@ export default class Title {
   }
 
   /**
+   * Animations.
+   */
+  show(isCurrent, previousTemplate) {
+    if (!isCurrent) return;
+
+    if (
+      !previousTemplate ||
+      previousTemplate === 'about' ||
+      previousTemplate === 'essays'
+    ) {
+      const tl = gsap.timeline({
+        defaults: { ease: 'power4.out', duration: 2 },
+        onComplete: () => (this.isAnimating = false),
+      });
+
+      this.isAnimating = true;
+
+      tl.fromTo(
+        this.mesh.position,
+        { x: this.mesh.position.x + 75, y: -this.viewport.height },
+        {
+          x: -this.viewport.width / 2,
+          y: -this.viewport.height / 2 + this.viewport.height * 0.2,
+        }
+      )
+        .fromTo(
+          this.mesh.rotation,
+          { x: Math.PI + Math.PI / 8 },
+          { x: Math.PI },
+          0
+        )
+        .fromTo(this.material.uniforms.uAlpha, { value: 0 }, { value: 1 }, 0)
+        .fromTo(
+          this.material.uniforms.uDistortion,
+          { value: 5 },
+          { value: 0 },
+          0
+        );
+    }
+  }
+
+  hide(isCurrent, nextTemplate) {
+    if (isCurrent && (nextTemplate === 'about' || nextTemplate === 'essays')) {
+      return new Promise((res) => {
+        this.isAnimating = true;
+
+        const tl = gsap.timeline({
+          defaults: { ease: 'power4.out', duration: 2 },
+          onComplete: () => {
+            this.isAnimating = false;
+
+            res();
+          },
+        });
+
+        tl.to(this.mesh.position, {
+          x: this.mesh.position.x - 75,
+          y: this.viewport.height,
+        })
+          .to(this.mesh.rotation, { x: Math.PI + Math.PI / 8 }, 0)
+          .to(this.material.uniforms.uAlpha, { value: 0 }, 0)
+          .to(this.material.uniforms.uDistortion, { value: 5 }, 0);
+      });
+    } else {
+      return Promise.resolve();
+    }
+  }
+
+  /**
    * Events.
    */
   onResize({ screen, viewport }) {
     this.screen = screen;
     this.viewport = viewport;
 
-    if (this.mesh) {
-      const scale = this.screen.width * 0.00175;
+    const scale = this.screen.width * 0.0016;
 
-      this.mesh.position.x = -this.viewport.width / 2;
-      this.mesh.position.y =
-        -this.viewport.height / 2 + this.viewport.height * 0.2;
-      this.mesh.scale.set(scale, scale, scale);
-    }
+    this.mesh.position.x = -this.viewport.width / 2;
+    this.mesh.position.y =
+      -this.viewport.height / 2 + this.viewport.height * 0.2;
+    this.mesh.scale.set(scale, scale, scale);
   }
 
   /**
    * Update.
    */
   update(percent) {
+    if (this.isAnimating) return;
+
     const percentAbsolute = Math.abs(percent);
 
-    if (this.material) {
-      this.material.uniforms.uAlpha.value = map(percentAbsolute, 0.25, 1, 1, 0);
+    this.material.uniforms.uAlpha.value = map(percentAbsolute, 0.25, 1, 1, 0);
 
-      this.material.uniforms.uDistortion.value = clamp(
-        0,
-        5,
-        map(percentAbsolute, 0, 1, 0, 5)
-      );
+    this.material.uniforms.uDistortion.value = clamp(
+      0,
+      5,
+      map(percentAbsolute, 0, 1, 0, 5)
+    );
 
-      this.mesh.position.x =
-        -this.viewport.width / 2 + map(percent, -1.25, 1.25, 75, -75);
-      this.mesh.position.z = map(percent, -1.25, 1.25, 50, -50);
+    this.mesh.position.x =
+      -this.viewport.width / 2 + map(percent, -1.25, 1.25, 75, -75);
+    this.mesh.position.z = map(percent, -1.25, 1.25, 50, -50);
 
-      this.mesh.rotation.x = map(
-        percent,
-        -1.25,
-        1.25,
-        Math.PI + Math.PI / 8,
-        Math.PI - Math.PI / 8
-      );
-    }
+    this.mesh.rotation.x = map(
+      percent,
+      -1.25,
+      1.25,
+      Math.PI + Math.PI / 8,
+      Math.PI - Math.PI / 8
+    );
   }
 
   /**

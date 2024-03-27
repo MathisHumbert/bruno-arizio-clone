@@ -83,7 +83,7 @@ export default class Title {
 
     this.mesh.rotation.x = Math.PI;
     this.mesh.position.x = -(this.geometry.layout.width / 2) * this.scale;
-    this.mesh.position.y = -this.viewport.height;
+    this.mesh.position.y = -(this.geometry.layout.height / 3) * this.scale;
     this.mesh.position.z = 0.01;
     this.mesh.scale.set(this.scale, this.scale, this.scale);
 
@@ -108,7 +108,11 @@ export default class Title {
   }
 
   hide(nextTemplate) {
-    if (nextTemplate === 'case') {
+    if (
+      nextTemplate === 'case' ||
+      nextTemplate === 'about' ||
+      nextTemplate === 'essays'
+    ) {
       return new Promise((res) => {
         const tl = gsap.timeline({
           defaults: { ease: 'power4.out', duration: 2 },
@@ -122,6 +126,10 @@ export default class Title {
           y: this.viewport.height,
         });
       });
+    } else {
+      this.destroy();
+
+      return Promise.resolve();
     }
   }
 
@@ -132,13 +140,12 @@ export default class Title {
     this.screen = screen;
     this.viewport = viewport;
 
-    if (this.mesh) {
-      this.scale = this.screen.width * 0.001;
+    this.scale = this.screen.width * 0.00065;
 
-      this.mesh.position.x = -this.viewport.width / 2;
-      this.mesh.position.y = -(this.geometry.layout.height / 4) * this.scale;
-      this.mesh.scale.set(this.scale, this.scale, this.scale);
-    }
+    this.mesh.position.x = -(this.geometry.layout.width / 2) * this.scale;
+    this.mesh.position.y = -(this.geometry.layout.height / 3) * this.scale;
+    this.mesh.position.z = 0.01;
+    this.mesh.scale.set(this.scale, this.scale, this.scale);
   }
 
   /**

@@ -241,7 +241,7 @@ export default class App {
     }
 
     if (this.canvas && this.canvas.update) {
-      this.canvas.update(this.page.scroll.current, deltaTime);
+      this.canvas.update(deltaTime);
     }
 
     window.requestAnimationFrame(this.update.bind(this));

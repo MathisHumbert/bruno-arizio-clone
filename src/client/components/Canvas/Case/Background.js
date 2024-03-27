@@ -76,7 +76,7 @@ export default class Background {
       )
         .fromTo(
           this.material.uniforms.uDisplacementY,
-          { value: 0.01 },
+          { value: 0.1 },
           { value: 0 },
           0
         )
@@ -102,10 +102,29 @@ export default class Background {
         });
 
         tl.to(this.mesh.position, { y: this.viewport.height * 1.33 })
-          .to(this.material.uniforms.uDisplacementY, { value: 0.01 }, 0)
+          .to(this.material.uniforms.uDisplacementY, { value: 0.1 }, 0)
           .to(this.material.uniforms.uDistortion, { value: 5 }, 0)
           .to(this.material.uniforms.uScale, { value: 0.5 }, 0);
       });
+    } else if (nextTemplate === 'about' || nextTemplate === 'essays') {
+      return new Promise((res) => {
+        const tl = gsap.timeline({
+          defaults: { ease: 'power4.out', duration: 2 },
+          onComplete: () => {
+            res();
+            this.destroy();
+          },
+        });
+
+        tl.to(this.mesh.position, { y: this.viewport.height * 1.33, z: -50 })
+          .to(this.material.uniforms.uDisplacementY, { value: 0.1 }, 0)
+          .to(this.material.uniforms.uDistortion, { value: 5 }, 0)
+          .to(this.material.uniforms.uScale, { value: 0.5 }, 0);
+      });
+    } else {
+      this.destroy();
+
+      return Promise.resolve();
     }
   }
 

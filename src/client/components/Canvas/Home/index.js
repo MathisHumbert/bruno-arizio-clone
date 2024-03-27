@@ -31,8 +31,6 @@ export default class Home extends EventEmitter {
     this.onHoldEndDebounce = debounce(this.onHoldEnd, 200);
 
     this.createProject();
-
-    this.show();
   }
 
   createProject() {
@@ -54,16 +52,22 @@ export default class Home extends EventEmitter {
   /**
    * Animations.
    */
-  show() {
-    if (this.media) {
-      this.media.show();
-    }
+  show(previousTemplate) {
+    each(this.projects, (project, index) => {
+      if (project && project.show) {
+        project.show(this.index === index, previousTemplate);
+      }
+    });
   }
 
-  hide() {
-    if (this.media) {
-      this.media.hide();
-    }
+  hide(nextTemplate) {
+    const promises = map(this.projects, (project, index) => {
+      if (project && project.hide) {
+        return project.hide(this.index === index, nextTemplate);
+      }
+    });
+
+    return Promise.all(promises);
   }
 
   /**
@@ -84,6 +88,8 @@ export default class Home extends EventEmitter {
   }
 
   onTouchDown(event) {
+    if (event.target.className !== 'home__wrapper') return;
+
     this.isDown = true;
 
     this.scroll.position = this.scroll.current;
@@ -202,17 +208,5 @@ export default class Home extends EventEmitter {
     });
 
     this.scroll.last = this.scroll.current;
-  }
-
-  /**
-   * Destroy.
-   */
-
-  destroy() {
-    each(this.projects, (project) => {
-      if (project && project.destroy) {
-        project.destroy();
-      }
-    });
   }
 }

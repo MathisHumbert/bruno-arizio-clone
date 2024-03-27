@@ -8,6 +8,7 @@ import AsyncLoad from '../classes/AsyncLoad';
 import { Detection } from '../classes/Detection';
 
 import Text from '../animations/Text';
+import Appear from '../animations/Appear';
 
 import { clamp, lerp } from '../utils/math';
 import { mapEach } from '../utils/dom';
@@ -28,6 +29,7 @@ export default class Page extends EventEmitter {
         pagePreloaders: '[data-page-src]',
 
         animationsTexts: '[data-animation="text"]',
+        animationsAppears: '[data-animation="appear"]',
 
         ...elements,
       },
@@ -99,6 +101,18 @@ export default class Page extends EventEmitter {
     });
 
     this.animations.push(...this.animationsText);
+
+    /**
+     * Appear.
+     */
+    this.animationsAppear = mapEach(
+      this.elements.animationsAppears,
+      (element) => {
+        return new Appear({ element });
+      }
+    );
+
+    this.animations.push(...this.animationsAppear);
   }
 
   /**

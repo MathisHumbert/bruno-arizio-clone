@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import { MSDFTextGeometry, uniforms } from 'three-msdf-text-utils';
-import gsap from 'gsap';
 
 import fragment from '../../../shaders/title-fragment.glsl';
 import vertex from '../../../shaders/title-vertex.glsl';
@@ -95,13 +94,6 @@ export default class Title {
 
     this.scene.add(this.mesh);
   }
-
-  /**
-   * Animations.
-   */
-  show(previousTemplate) {}
-
-  hide(nextTemplate) {}
 
   /**
    * Events.

@@ -24,7 +24,7 @@ export function renderEssays(data) {
                 (item) => /*html*/ `
                 <li class="essays__list__item">
                   <a href="${item.link.url}" data-link class="essays__list__item__link">
-                    <span class="essays__list__item__link__wrapper">
+                    <span class="essays__list__item__link__wrapper" data-animation="appear">
                       <span class="essays__list__item__link__text">
                       ${item.text}
                       </span>

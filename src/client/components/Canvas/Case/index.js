@@ -79,10 +79,9 @@ export default class Case {
     if (this.background && this.background.onResize) {
       this.background.onResize({ screen, viewport });
     }
-  }
 
-  /**
-   * Destroy.
-   */
-  destroy() {}
+    if (this.title && this.title.onResize) {
+      this.title.onResize({ screen, viewport });
+    }
+  }
 }

@@ -15,6 +15,7 @@ export default class Background {
     this.index = index;
 
     this.location = this.viewport.height * 1.33 * this.index * -1;
+    this.isAnimating = false;
 
     this.createMaterial();
     this.createMesh();
@@ -61,6 +62,68 @@ export default class Background {
   }
 
   /**
+   * Animations.
+   */
+  show(isCurrent, previousTemplate) {
+    if (!isCurrent) return;
+
+    if (previousTemplate === 'about' || previousTemplate === 'essays') {
+      this.isAnimating = true;
+
+      const tl = gsap.timeline({
+        defaults: { ease: 'power4.out', duration: 2 },
+        onComplete: () => (this.isAnimating = false),
+      });
+
+      tl.fromTo(
+        this.mesh.position,
+        {
+          y: -this.viewport.height * 1.33,
+          z: -50,
+        },
+        { y: 0, z: 0 }
+      )
+        .fromTo(
+          this.material.uniforms.uDisplacementY,
+          { value: 0.1 },
+          { value: 0 },
+          0
+        )
+        .fromTo(
+          this.material.uniforms.uDistortion,
+          { value: 5 },
+          { value: 0 },
+          0
+        )
+        .fromTo(this.material.uniforms.uScale, { value: 0.5 }, { value: 0 }, 0);
+    }
+  }
+
+  hide(isCurrent, nextTemplate) {
+    if (isCurrent && (nextTemplate === 'about' || nextTemplate === 'essays')) {
+      return new Promise((res) => {
+        this.isAnimating = true;
+
+        const tl = gsap.timeline({
+          defaults: { ease: 'power4.out', duration: 2 },
+          onComplete: () => {
+            this.isAnimating = false;
+
+            res();
+          },
+        });
+
+        tl.to(this.mesh.position, { y: this.viewport.height * 1.33, z: -50 })
+          .to(this.material.uniforms.uDisplacementY, { value: 0.1 }, 0)
+          .to(this.material.uniforms.uDistortion, { value: 5 }, 0)
+          .to(this.material.uniforms.uScale, { value: 0.5 }, 0);
+      });
+    } else {
+      return Promise.resolve();
+    }
+  }
+
+  /**
    * Events.
    */
   onResize({ screen, viewport }) {
@@ -96,6 +159,8 @@ export default class Background {
    * Loop.
    */
   update(percent, time) {
+    if (this.isAnimating) return;
+
     const percentAbsolute = Math.abs(percent);
 
     this.material.uniforms.uDistortion.value = map(percentAbsolute, 0, 1, 0, 5);

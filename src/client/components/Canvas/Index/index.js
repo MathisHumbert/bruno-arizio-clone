@@ -13,6 +13,7 @@ export default class Index {
     this.geometry = geometry;
     this.screen = screen;
     this.viewport = viewport;
+    this.index = index;
 
     this.linkElements = document.querySelectorAll('.index__link');
     this.scroll = {
@@ -22,7 +23,6 @@ export default class Index {
       limit: 0,
       ease: 0.1,
     };
-    this.index = index;
 
     this.onCheckDebounce = debounce(this.onCheck, 400);
 
@@ -53,15 +53,39 @@ export default class Index {
       screen: this.screen,
       viewport: this.viewport,
       textures,
+      index: this.index,
     });
   }
 
   /**
    * Animations.
    */
-  show() {}
+  show(previousTemplate) {
+    if (this.background && this.background.show) {
+      this.background.show(previousTemplate);
+    }
 
-  hide() {}
+    if (this.titles && this.titles.show) {
+      this.titles.show(previousTemplate, () => this.calculate());
+    }
+  }
+
+  hide(nextTemplate) {
+    let promises = [];
+
+    if (this.background) {
+      const promise = this.background.hide(nextTemplate);
+
+      promises.push(promise);
+    }
+
+    if (this.titles && this.titles.hide) {
+      const promise = this.titles.hide(nextTemplate);
+
+      promises.push(promise);
+    }
+    return Promise.all(promises);
+  }
 
   /**
    * Events.
@@ -153,7 +177,9 @@ export default class Index {
       this.scroll.ease
     );
 
-    this.titles.group.position.y = this.scroll.current;
+    if (!this.titles.isAnimating) {
+      this.titles.group.position.y = this.scroll.current;
+    }
 
     if (
       this.titles.group.position.y.toFixed(3) !== this.scroll.target.toFixed(3)
@@ -171,6 +197,8 @@ export default class Index {
   }
 
   calculate() {
+    if (this.titles.isAnimating) return;
+
     const position = new THREE.Vector3();
     const box = new THREE.Box3();
 

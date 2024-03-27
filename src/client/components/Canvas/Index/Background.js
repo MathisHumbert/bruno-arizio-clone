@@ -2,25 +2,25 @@ import * as THREE from 'three';
 import gsap from 'gsap';
 
 import fragment from '../../../shaders/background-fragment.glsl';
-import vertex from '../../../shaders/vertex.glsl';
+import vertex from '../../../shaders/background-vertex.glsl';
 
 export default class Background {
-  constructor({ scene, geometry, screen, viewport, textures }) {
+  constructor({ scene, geometry, screen, viewport, textures, index }) {
     this.scene = scene;
     this.geometry = geometry;
     this.screen = screen;
     this.viewport = viewport;
     this.textures = textures;
+    this.index = index;
 
-    this.index = 0;
-    this.isAnimating = false;
+    this.isAnimating = true;
 
     this.createMaterial();
     this.createMesh();
   }
 
   createMaterial() {
-    const texture = this.textures[0];
+    const texture = this.textures[this.index];
 
     this.material = new THREE.ShaderMaterial({
       uniforms: {
@@ -56,6 +56,85 @@ export default class Background {
     this.mesh.position.z = -150;
 
     this.scene.add(this.mesh);
+  }
+
+  /**
+   * Animations.
+   */
+  show(previousTemplate) {
+    if (!previousTemplate) {
+      this.isAnimating = true;
+
+      const tl = gsap.timeline({
+        defaults: { ease: 'power4.out', duration: 2 },
+        onComplete: () => {
+          this.isAnimating = false;
+        },
+      });
+
+      tl.fromTo(this.mesh.position, { z: 0 }, { z: -150 }).fromTo(
+        this.material.uniforms.uScale,
+        { value: 0.5 },
+        { value: 0.2 },
+        0
+      );
+    }
+
+    if (previousTemplate === 'about' || previousTemplate === 'essays') {
+      this.isAnimating = true;
+
+      const tl = gsap.timeline({
+        defaults: { ease: 'power4.out', duration: 2 },
+        onComplete: () => (this.isAnimating = false),
+      });
+
+      tl.fromTo(
+        this.mesh.position,
+        {
+          y: -this.viewport.height * 1.33,
+          z: 0,
+        },
+        { y: 0, z: -150 }
+      )
+        .fromTo(
+          this.material.uniforms.uDistortion,
+          { value: 5 },
+          { value: 0 },
+          0
+        )
+        .fromTo(
+          this.material.uniforms.uScale,
+          { value: 0.5 },
+          { value: 0.2 },
+          0
+        );
+    }
+  }
+
+  async hide(nextTemplate) {
+    if (nextTemplate === 'about' || nextTemplate === 'essays') {
+      this.isAnimating = true;
+
+      return new Promise((res) => {
+        const tl = gsap.timeline({
+          defaults: { ease: 'power4.out', duration: 2 },
+          onComplete: () => {
+            this.isAnimating = false;
+
+            res();
+            this.destroy();
+          },
+        });
+
+        tl.to(this.mesh.position, { y: this.viewport.height * 1.33, z: 0 })
+          .to(this.material.uniforms.uDistortion, { value: 5 }, 0)
+          .to(this.material.uniforms.uScale, { value: 0.5 }, 0);
+      });
+    } else {
+      this.destroy();
+
+      return Promise.resolve();
+    }
   }
 
   /**

@@ -1,5 +1,6 @@
 import { each, map } from 'lodash';
 import * as THREE from 'three';
+import gsap from 'gsap';
 
 import Title from './Title';
 
@@ -9,6 +10,7 @@ export default class Titles {
     this.screen = screen;
     this.viewport = viewport;
 
+    this.isAnimating = true;
     this.height = 0;
     this.group = new THREE.Group();
     this.scene.add(this.group);
@@ -30,6 +32,63 @@ export default class Titles {
     );
 
     this.height = this.titles[0].height + this.titles[0].padding;
+  }
+
+  /**
+   * Animations.
+   */
+  show(previousTemplate, onComplete) {
+    if (
+      !previousTemplate ||
+      previousTemplate === 'about' ||
+      previousTemplate === 'essays'
+    ) {
+      this.isAnimating = true;
+
+      const tl = gsap.timeline({
+        defaults: { ease: 'power4.out', duration: 2 },
+        onComplete: () => {
+          this.isAnimating = false;
+          onComplete();
+        },
+      });
+
+      tl.fromTo(
+        this.group.position,
+        { y: this.viewport.height * 1.66 },
+        { y: 0 }
+      );
+    } else {
+      this.isAnimating = false;
+
+      onComplete();
+    }
+  }
+
+  hide(nextTemplate) {
+    if (nextTemplate === 'about' || nextTemplate === 'essays') {
+      return new Promise((res) => {
+        this.isAnimating = true;
+
+        const tl = gsap.timeline({
+          defaults: { ease: 'power4.out', duration: 2 },
+          onComplete: () => {
+            this.isAnimating = false;
+
+            res();
+            this.destroy();
+          },
+        });
+
+        tl.to(this.group.position, {
+          y: this.viewport.height * 1.66 + this.height,
+        });
+      });
+    } else {
+      this.destroy();
+
+      return Promise.resolve();
+    }
   }
 
   /**
@@ -60,6 +119,10 @@ export default class Titles {
    * Loop.
    */
   update() {
+    if (this.isAnimating) {
+      return;
+    }
+
     each(this.titles, (title) => {
       if (title && title.update) {
         title.update();
@@ -71,6 +134,12 @@ export default class Titles {
    * Destroy.
    */
   destroy() {
+    each(this.titles, (title) => {
+      if (title && title.destroy) {
+        title.destroy();
+      }
+    });
+
     this.scene.remove(this.group);
   }
 }

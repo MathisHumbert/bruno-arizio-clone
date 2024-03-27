@@ -76,16 +76,32 @@ export default class Project {
   /**
    * Animations.
    */
-  show() {
+  show(isCurrent, previousTemplate) {
     if (this.background && this.background.show) {
-      this.background.show();
+      this.background.show(isCurrent, previousTemplate);
+    }
+
+    if (this.title && this.title.show) {
+      this.title.show(isCurrent, previousTemplate);
     }
   }
 
-  hide() {
+  async hide(isCurrent, nextTemplate) {
+    let promises = [];
+
     if (this.background && this.background.hide) {
-      this.background.hide();
+      const promise = this.background.hide(isCurrent, nextTemplate);
+
+      promises.push(promise);
     }
+
+    if (this.title && this.title.hide) {
+      const promise = this.title.hide(isCurrent, nextTemplate);
+
+      promises.push(promise);
+    }
+
+    return Promise.all(promises).then(() => this.destroy());
   }
 
   /**

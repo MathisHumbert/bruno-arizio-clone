@@ -70,7 +70,6 @@ export default class Canvas extends EventEmitter {
   destroyHome() {
     if (!this.home) return;
 
-    this.home.destroy();
     this.home = null;
   }
 
@@ -91,7 +90,6 @@ export default class Canvas extends EventEmitter {
   destroyIndex() {
     if (!this.indexes) return;
 
-    this.indexes.destroy();
     this.indexes = null;
   }
 
@@ -111,7 +109,6 @@ export default class Canvas extends EventEmitter {
   destroyCase() {
     if (!this.case) return;
 
-    this.case.destroy();
     this.case = null;
   }
 
@@ -136,15 +133,21 @@ export default class Canvas extends EventEmitter {
 
     return new Promise(async (res) => {
       if (this.home) {
-        await this.home.hide();
+        await this.home.hide(template);
+
+        this.destroyHome();
       }
 
       if (this.indexes) {
-        await this.indexes.hide();
+        await this.indexes.hide(template);
+
+        this.destroyIndex();
       }
 
       if (this.case) {
         await this.case.hide(template);
+
+        this.destroyCase();
       }
 
       this.currentPage = template;
@@ -156,11 +159,15 @@ export default class Canvas extends EventEmitter {
       if (template === 'home') {
         this.createHome();
 
+        this.home.show(previousTemplate);
+
         this.home.on('change', (index) => this.onIndexChange(index));
       }
 
       if (template === 'index') {
         this.createIndex();
+
+        this.indexes.show(previousTemplate);
       }
 
       if (template === 'case') {
@@ -253,7 +260,7 @@ export default class Canvas extends EventEmitter {
   /**
    * Loop.
    */
-  update(scroll, deltaTime) {
+  update(deltaTime) {
     if (this.home && this.home.update) {
       this.home.update(deltaTime);
     }
