@@ -5,6 +5,8 @@ import Title from './Title';
 
 export default class Case {
   constructor({ scene, geometry, screen, viewport, index }) {
+    this.name = 'Case';
+
     this.scene = scene;
     this.geometry = geometry;
     this.screen = screen;
@@ -14,7 +16,7 @@ export default class Case {
     const project = find(appData.projects, (_, index) => index === this.index);
 
     this.texture = window.TEXTURES[project.data.desktop.url];
-    this.name = project.data.name;
+    this.projectName = project.data.name;
 
     this.createBackground();
     this.createTitle();
@@ -36,7 +38,7 @@ export default class Case {
       scene: this.scene,
       screen: this.screen,
       viewport: this.viewport,
-      name: this.name,
+      name: this.projectName,
       index: this.index,
     });
   }

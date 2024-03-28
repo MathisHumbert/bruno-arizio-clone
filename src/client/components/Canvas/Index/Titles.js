@@ -13,7 +13,6 @@ export default class Titles {
     this.isAnimating = true;
     this.height = 0;
     this.group = new THREE.Group();
-    this.scene.add(this.group);
 
     this.createTitles();
   }
@@ -38,6 +37,8 @@ export default class Titles {
    * Animations.
    */
   show(previousTemplate, onComplete) {
+    this.scene.add(this.group);
+
     if (
       !previousTemplate ||
       previousTemplate === 'about' ||
@@ -81,10 +82,12 @@ export default class Titles {
         });
 
         tl.to(this.group.position, {
-          y: this.viewport.height * 1.66 + this.height,
+          y: -this.viewport.height * 1.66 + this.height,
         });
       });
     } else {
+      this.isAnimating = false;
+
       this.destroy();
 
       return Promise.resolve();

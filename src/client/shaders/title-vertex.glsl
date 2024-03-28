@@ -17,6 +17,7 @@ attribute float letterIndex;
 uniform float uDistortion;
 uniform float uDistortionX;
 uniform float uDistortionY;
+uniform float uCount; 
 
 // Varyings
 varying vec2 vUv;
@@ -39,8 +40,8 @@ varying float vLetterIndex;
 void main() {
   vec3 newPosition = position;
 
-  float distanceX = length(position.x) / 50.0;
-  float distanceY = length(position.y) / 50.0;
+  float distanceX = length(position.x) / uCount;
+  float distanceY = length(position.y) / uCount;
 
   float distanceXPow = pow(uDistortionX, distanceX);
   float distanceYPow = pow(uDistortionY, distanceY);

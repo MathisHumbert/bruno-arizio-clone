@@ -1,13 +1,17 @@
 import * as THREE from 'three';
 import gsap from 'gsap';
 import { debounce, each } from 'lodash';
+import EventEmitter from 'events';
 
 import Background from './Background';
 import Titles from './Titles';
 import { clamp, lerp } from '../../../utils/math';
 
-export default class Index {
+export default class Index extends EventEmitter {
   constructor({ scene, camera, geometry, screen, viewport, index }) {
+    super();
+    this.name = 'Index';
+
     this.scene = scene;
     this.camera = camera;
     this.geometry = geometry;
@@ -23,6 +27,7 @@ export default class Index {
       limit: 0,
       ease: 0.1,
     };
+    this.isAnimating = true;
 
     this.onCheckDebounce = debounce(this.onCheck, 400);
 
@@ -66,12 +71,16 @@ export default class Index {
     }
 
     if (this.titles && this.titles.show) {
-      this.titles.show(previousTemplate, () => this.calculate());
+      this.titles.show(previousTemplate, () => {
+        this.isAnimating = false;
+        this.set(this.index);
+      });
     }
   }
 
   hide(nextTemplate) {
     let promises = [];
+    this.isAnimating = true;
 
     if (this.background) {
       const promise = this.background.hide(nextTemplate);
@@ -84,6 +93,7 @@ export default class Index {
 
       promises.push(promise);
     }
+
     return Promise.all(promises);
   }
 
@@ -143,6 +153,7 @@ export default class Index {
     this.index = index;
 
     this.scroll.target = this.scroll.current = this.titles.height * this.index;
+    this.titles.group.position.y = this.scroll.current;
 
     if (this.titles && this.titles.set) {
       this.titles.set(index);
@@ -159,10 +170,14 @@ export default class Index {
    * Loop.
    */
   update() {
+    if (this.isAnimating) return;
+
     const index = Math.round(this.titles.group.position.y / this.titles.height);
 
     if (this.index !== index) {
       this.index = index;
+
+      this.emit('change', this.index);
 
       if (this.titles && this.titles.set) {
         this.titles.set(this.index);
@@ -177,9 +192,7 @@ export default class Index {
       this.scroll.ease
     );
 
-    if (!this.titles.isAnimating) {
-      this.titles.group.position.y = this.scroll.current;
-    }
+    this.titles.group.position.y = this.scroll.current;
 
     if (
       this.titles.group.position.y.toFixed(3) !== this.scroll.target.toFixed(3)
@@ -197,8 +210,6 @@ export default class Index {
   }
 
   calculate() {
-    if (this.titles.isAnimating) return;
-
     const position = new THREE.Vector3();
     const box = new THREE.Box3();
 

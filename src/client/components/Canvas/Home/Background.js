@@ -57,14 +57,14 @@ export default class Background {
     this.mesh.scale.x = this.viewport.width;
     this.mesh.scale.y = this.viewport.height;
     this.mesh.position.z = -0.01;
-
-    this.scene.add(this.mesh);
   }
 
   /**
    * Animations.
    */
   show(isCurrent, previousTemplate) {
+    this.scene.add(this.mesh);
+
     if (!isCurrent) return;
 
     if (previousTemplate === 'about' || previousTemplate === 'essays') {
@@ -165,7 +165,7 @@ export default class Background {
 
     this.material.uniforms.uDistortion.value = map(percentAbsolute, 0, 1, 0, 5);
 
-    this.material.uniforms.uScale.value = map(percentAbsolute, 0, 1, 0, 0.5);
+    this.material.uniforms.uScale.value = map(percent, 0, 1, 0, 0.5);
 
     this.material.uniforms.uTime.value += time * 0.75;
 

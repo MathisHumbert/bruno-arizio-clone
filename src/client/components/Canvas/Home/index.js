@@ -5,8 +5,9 @@ import Project from './Project';
 import { lerp } from '../../../utils/math';
 
 export default class Home extends EventEmitter {
-  constructor({ scene, geometry, screen, viewport }) {
+  constructor({ scene, geometry, screen, viewport, index }) {
     super();
+    this.name = 'Home';
 
     this.scene = scene;
     this.geometry = geometry;
@@ -23,7 +24,6 @@ export default class Home extends EventEmitter {
     };
     this.isDown = 0;
     this.indexInfinite = 0;
-    this.index = 0;
     this.direction = 'none';
     this.scaledViewportHeight = this.viewport.height * 1.33;
 
@@ -31,6 +31,7 @@ export default class Home extends EventEmitter {
     this.onHoldEndDebounce = debounce(this.onHoldEnd, 200);
 
     this.createProject();
+    this.set(index);
   }
 
   createProject() {
@@ -145,6 +146,20 @@ export default class Home extends EventEmitter {
     this.scroll.target = this.scaledViewportHeight * this.indexInfinite;
   }
 
+  set(index) {
+    if (this.index === index) {
+      return;
+    }
+
+    this.index = index;
+    this.indexInfinite = index;
+
+    this.current = this.projects[this.index];
+
+    this.scroll.target = this.scroll.current =
+      this.scaledViewportHeight * this.index;
+  }
+
   /**
    * Loop.
    */
@@ -182,6 +197,8 @@ export default class Home extends EventEmitter {
       this.emit('change', this.index);
     }
 
+    this.current = this.projects[this.index];
+
     each(this.projects, (project) => {
       if (project) {
         project.isBefore = project.group.position.y > this.scaledViewportHeight;
@@ -208,5 +225,12 @@ export default class Home extends EventEmitter {
     });
 
     this.scroll.last = this.scroll.current;
+  }
+
+  /**
+   * Getters.
+   */
+  get background() {
+    return this.current.background;
   }
 }

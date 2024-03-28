@@ -116,7 +116,7 @@ export default class App {
       this.page.index
     );
 
-    this.page.show();
+    this.page.show(this.canvas.index);
 
     res();
   }

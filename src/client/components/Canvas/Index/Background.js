@@ -54,14 +54,14 @@ export default class Background {
     this.mesh.scale.x = this.viewport.width;
     this.mesh.scale.y = this.viewport.height;
     this.mesh.position.z = -150;
-
-    this.scene.add(this.mesh);
   }
 
   /**
    * Animations.
    */
   show(previousTemplate) {
+    this.scene.add(this.mesh);
+
     if (!previousTemplate) {
       this.isAnimating = true;
 
@@ -78,9 +78,7 @@ export default class Background {
         { value: 0.2 },
         0
       );
-    }
-
-    if (previousTemplate === 'about' || previousTemplate === 'essays') {
+    } else if (previousTemplate === 'about' || previousTemplate === 'essays') {
       this.isAnimating = true;
 
       const tl = gsap.timeline({
@@ -108,6 +106,8 @@ export default class Background {
           { value: 0.2 },
           0
         );
+    } else {
+      this.isAnimating = false;
     }
   }
 
@@ -131,6 +131,8 @@ export default class Background {
           .to(this.material.uniforms.uScale, { value: 0.5 }, 0);
       });
     } else {
+      this.isAnimating = false;
+
       this.destroy();
 
       return Promise.resolve();

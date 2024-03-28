@@ -1,17 +1,15 @@
 import * as THREE from 'three';
 import { MSDFTextGeometry, uniforms } from 'three-msdf-text-utils';
-import gsap from 'gsap';
 
 import fragment from '../../../shaders/title-fragment.glsl';
 import vertex from '../../../shaders/title-vertex.glsl';
 
 export default class Title {
-  constructor({ scene, screen, viewport, name, index }) {
+  constructor({ scene, screen, viewport, name }) {
     this.scene = scene;
     this.screen = screen;
     this.viewport = viewport;
     this.name = name;
-    this.index = index;
 
     this.atlas = window.TITLE.atlas;
     this.font = window.TITLE.font;
@@ -67,6 +65,7 @@ export default class Title {
       vertexShader: vertex,
       fragmentShader: fragment,
     });
+
     this.material.uniforms.uMap.value = this.atlas;
   }
 
@@ -78,7 +77,7 @@ export default class Title {
   }
 
   createMesh() {
-    this.scale = this.screen.width * 0.00065;
+    this.scale = 1;
 
     this.mesh = new THREE.Mesh(this.geometry, this.material);
 
@@ -87,51 +86,8 @@ export default class Title {
     this.mesh.position.y = -(this.geometry.layout.height / 3) * this.scale;
     this.mesh.position.z = 0.01;
     this.mesh.scale.set(this.scale, this.scale, this.scale);
-  }
 
-  /**
-   * Animations.
-   */
-  show(previousTemplate) {
     this.scene.add(this.mesh);
-
-    if (previousTemplate !== 'home' && previousTemplate !== 'index') {
-      gsap.fromTo(
-        this.mesh.position,
-        { y: -this.viewport.height },
-        {
-          y: -(this.geometry.layout.height / 3) * this.scale,
-          duration: 2,
-          ease: 'power4.out',
-        }
-      );
-    }
-  }
-
-  hide(nextTemplate) {
-    if (
-      nextTemplate === 'case' ||
-      nextTemplate === 'about' ||
-      nextTemplate === 'essays'
-    ) {
-      return new Promise((res) => {
-        const tl = gsap.timeline({
-          defaults: { ease: 'power4.out', duration: 2 },
-          onComplete: () => {
-            res();
-            this.destroy();
-          },
-        });
-
-        tl.to(this.mesh.position, {
-          y: this.viewport.height,
-        });
-      });
-    } else {
-      this.destroy();
-
-      return Promise.resolve();
-    }
   }
 
   /**
@@ -141,7 +97,7 @@ export default class Title {
     this.screen = screen;
     this.viewport = viewport;
 
-    this.scale = this.screen.width * 0.00065;
+    this.scale = 1;
 
     this.mesh.position.x = -(this.geometry.layout.width / 2) * this.scale;
     this.mesh.position.y = -(this.geometry.layout.height / 3) * this.scale;

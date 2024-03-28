@@ -7,8 +7,8 @@ varying vec2 vUv;
 void main(){
   vec3 newPosition = position;
 
-  float distanceX = length(position.x) / 50.;
-  float distanceY = length(position.x) / 50.;
+  float distanceX = length(position.x) * 5.;
+  float distanceY = length(position.y) * 5.;
 
   float distanceXPow = pow(uDistortionX, distanceX);
   float distanceYPow = pow(uDistortionY, distanceY);

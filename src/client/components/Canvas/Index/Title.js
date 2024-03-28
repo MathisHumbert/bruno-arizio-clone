@@ -63,6 +63,7 @@ export default class Title {
         uTransition: {
           value: 0,
         },
+        uCount: { value: this.geometry.index.count },
       },
       vertexShader: vertex,
       fragmentShader: fragment,

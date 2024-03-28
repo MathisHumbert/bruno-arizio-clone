@@ -4,7 +4,7 @@ import gsap from 'gsap';
 
 import fragment from '../../../shaders/title-fragment.glsl';
 import vertex from '../../../shaders/title-vertex.glsl';
-import { clamp, map } from '../../../utils/math';
+import { map } from '../../../utils/math';
 
 export default class Title {
   constructor({ scene, screen, viewport, name, index }) {
@@ -64,6 +64,7 @@ export default class Title {
         uTransition: {
           value: 1,
         },
+        uCount: { value: this.geometry.index.count },
       },
       vertexShader: vertex,
       fragmentShader: fragment,
@@ -80,7 +81,7 @@ export default class Title {
   }
 
   createMesh() {
-    const scale = this.screen.width * 0.0016;
+    this.scale = this.screen.width * 0.0016;
 
     this.mesh = new THREE.Mesh(this.geometry, this.material);
 
@@ -89,15 +90,15 @@ export default class Title {
     this.mesh.position.y =
       -this.viewport.height / 2 + this.viewport.height * 0.2;
     this.mesh.position.z = 0.01;
-    this.mesh.scale.set(scale, scale, scale);
-
-    this.scene.add(this.mesh);
+    this.mesh.scale.set(this.scale, this.scale, this.scale);
   }
 
   /**
    * Animations.
    */
   show(isCurrent, previousTemplate) {
+    this.scene.add(this.mesh);
+
     if (!isCurrent) return;
 
     if (
@@ -170,12 +171,12 @@ export default class Title {
     this.screen = screen;
     this.viewport = viewport;
 
-    const scale = this.screen.width * 0.0016;
+    this.scale = this.screen.width * 0.0016;
 
     this.mesh.position.x = -this.viewport.width / 2;
     this.mesh.position.y =
       -this.viewport.height / 2 + this.viewport.height * 0.2;
-    this.mesh.scale.set(scale, scale, scale);
+    this.mesh.scale.set(this.scale, this.scale, this.scale);
   }
 
   /**
@@ -188,10 +189,12 @@ export default class Title {
 
     this.material.uniforms.uAlpha.value = map(percentAbsolute, 0.25, 1, 1, 0);
 
-    this.material.uniforms.uDistortion.value = clamp(
+    this.material.uniforms.uDistortion.value = map(
+      percentAbsolute,
       0,
-      5,
-      map(percentAbsolute, 0, 1, 0, 5)
+      1,
+      0,
+      10
     );
 
     this.mesh.position.x =

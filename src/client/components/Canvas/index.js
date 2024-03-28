@@ -4,6 +4,7 @@ import EventEmitter from 'events';
 import Home from './Home';
 import Index from './Index/index';
 import Case from './Case';
+import Transition from './Transition';
 
 export default class Canvas extends EventEmitter {
   constructor({ template }) {
@@ -64,7 +65,10 @@ export default class Canvas extends EventEmitter {
       geometry: this.geometry,
       screen: this.screen,
       viewport: this.viewport,
+      index: this.index,
     });
+
+    this.home.on('change', (index) => this.onIndexChange(index));
   }
 
   destroyHome() {
@@ -85,6 +89,8 @@ export default class Canvas extends EventEmitter {
       viewport: this.viewport,
       index: this.index,
     });
+
+    this.indexes.on('change', (index) => this.onIndexChange(index));
   }
 
   destroyIndex() {
@@ -150,30 +156,48 @@ export default class Canvas extends EventEmitter {
         this.destroyCase();
       }
 
-      this.currentPage = template;
-
-      // if (this.currentPage && template !== previousTemplate) {
-      //   console.log('create transition');
-      // }
-
       if (template === 'home') {
         this.createHome();
 
-        this.home.show(previousTemplate);
-
-        this.home.on('change', (index) => this.onIndexChange(index));
+        this.currentPage = this.home;
       }
 
       if (template === 'index') {
         this.createIndex();
 
-        this.indexes.show(previousTemplate);
+        this.currentPage = this.indexes;
       }
 
       if (template === 'case') {
         this.createCase();
 
-        this.case.show(previousTemplate);
+        this.currentPage = this.case;
+      }
+
+      if (template === 'about' || template === 'essays') {
+        this.currentPage = null;
+      }
+
+      if (
+        this.previousPage &&
+        this.currentPage &&
+        template !== previousTemplate
+      ) {
+        this.transition = new Transition({
+          scene: this.scene,
+          geometry: this.geometry,
+          screen: this.screen,
+          viewport: this.viewport,
+          index: this.index,
+        });
+
+        await this.transition.animate(this.currentPage, this.previousPage);
+      }
+
+      if (this.currentPage) {
+        this.currentPage.show(previousTemplate);
+      } else {
+        this.onIndexChange(0);
       }
 
       res();

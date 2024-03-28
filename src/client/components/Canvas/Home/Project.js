@@ -108,9 +108,9 @@ export default class Project {
    * Loop.
    */
   update(scroll, time) {
-    const percent = this.group.position.y / this.viewport.height;
-
     this.group.position.y = this.location + scroll;
+
+    const percent = this.group.position.y / this.viewport.height;
 
     if (this.background && this.background.update) {
       this.background.update(percent, time);

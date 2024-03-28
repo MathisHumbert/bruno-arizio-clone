@@ -53,14 +53,14 @@ export default class Background {
     this.mesh.scale.x = this.viewport.width;
     this.mesh.scale.y = this.viewport.height;
     this.mesh.position.z = -0.01;
-
-    this.scene.add(this.mesh);
   }
 
   /**
    * Animations.
    */
   show(previousTemplate) {
+    this.scene.add(this.mesh);
+
     if (previousTemplate !== 'home' && previousTemplate !== 'index') {
       const tl = gsap.timeline({
         defaults: { ease: 'power4.out', duration: 2 },
