@@ -1,0 +1,746 @@
+{
+  "\u0000/Users/mathis/Documents/dev/bruno-arizio-clone/node_modules/ev-emitter/ev-emitter.js?commonjs-module": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "\u0000/Users/mathis/Documents/dev/bruno-arizio-clone/node_modules/events/events.js?commonjs-module": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "\u0000/Users/mathis/Documents/dev/bruno-arizio-clone/node_modules/imagesloaded/imagesloaded.js?commonjs-module": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "\u0000/Users/mathis/Documents/dev/bruno-arizio-clone/node_modules/lodash/_nodeUtil.js?commonjs-module": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "\u0000/Users/mathis/Documents/dev/bruno-arizio-clone/node_modules/lodash/isBuffer.js?commonjs-module": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "\u0000/Users/mathis/Documents/dev/bruno-arizio-clone/node_modules/lodash/lodash.js?commonjs-module": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "\u0000/Users/mathis/Documents/dev/bruno-arizio-clone/node_modules/prefix/index.js?commonjs-module": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "\u0000/Users/mathis/Documents/dev/bruno-arizio-clone/node_modules/three-msdf-text-utils/build/bundle.js?commonjs-module": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "\u0000/Users/mathis/Documents/dev/bruno-arizio-clone/node_modules/three/build/three.module.js?commonjs-proxy": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "\u0000/Users/mathis/Documents/dev/bruno-arizio-clone/node_modules/ua-parser-js/src/ua-parser.js?commonjs-module": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "\u0000commonjsHelpers.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/ev-emitter/ev-emitter.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/events/events.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/imagesloaded/imagesloaded.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_DataView.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_Hash.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_ListCache.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_Map.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_MapCache.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_Promise.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_Set.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_SetCache.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_Stack.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_Symbol.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_Uint8Array.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_WeakMap.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_assocIndexOf.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_baseGetTag.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_baseIsArguments.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_baseIsNative.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_baseToString.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_coreJsData.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_equalByTag.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_freeGlobal.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_getMapData.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_getNative.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_getRawTag.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_getTag.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_getValue.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_hashClear.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_hashDelete.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_hashGet.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_hashHas.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_hashSet.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_isKeyable.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_isMasked.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_listCacheClear.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_listCacheDelete.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_listCacheGet.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_listCacheHas.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_listCacheSet.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_mapCacheClear.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_mapCacheDelete.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_mapCacheGet.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_mapCacheHas.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_mapCacheSet.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_memoizeCapped.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_nativeCreate.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_nodeUtil.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_objectToString.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_root.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_setCacheAdd.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_setCacheHas.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_stackClear.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_stackDelete.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_stackGet.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_stackHas.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_stackSet.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_stringToPath.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/_toSource.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/eq.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/isArguments.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/isBuffer.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/isFunction.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/isObject.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/isObjectLike.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/isTypedArray.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/lodash.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/memoize.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/lodash/stubFalse.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/nodelist-foreach-polyfill/index.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/normalize-wheel/src/ExecutionEnvironment.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/normalize-wheel/src/UserAgent_DEPRECATED.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/normalize-wheel/src/isEventSupported.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/normalize-wheel/src/normalizeWheel.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/prefix/index.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/split-type/dist/index.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/three-msdf-text-utils/build/bundle.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/three/build/three.module.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "node_modules/ua-parser-js/src/ua-parser.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "src/client/classes/Detection.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "src/client/index.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ],
+  "src/client/utils/scroll.js": [
+    "/apercu-pro-bold.woff2",
+    "/apercu-pro-bold.woff",
+    "/apercu-pro-medium.woff2",
+    "/apercu-pro-medium.woff",
+    "/apercu-pro-regular.woff2",
+    "/apercu-pro-regular.woff"
+  ]
+}
