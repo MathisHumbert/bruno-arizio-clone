@@ -16,16 +16,6 @@ const isProduction = process.env.NODE_ENV === 'production';
 const port = process.env.PORT || 3000;
 const base = process.env.BASE || '/';
 
-const templateHtml = isProduction
-  ? await fs.readFile(path.resolve('dist/client/index.html'), 'utf-8')
-  : '';
-const ssrManifest = isProduction
-  ? await fs.readFile(
-      path.resolve('dist/client/.vite/ssr-manifest.json'),
-      'utf-8'
-    )
-  : undefined;
-
 const initApi = (req) => {
   return prismic.createClient(process.env.PRISMIC_REPOSITORY, {
     accessToken: process.env.PRISMIC_ACCESS_TOKEN,
@@ -109,12 +99,8 @@ app.use(async (req, res, next) => {
       render = (await vite.ssrLoadModule(path.resolve('src/entry-server.js')))
         .render;
     } else {
-      if (templateHtml) {
-        template = templateHtml;
-      } else {
-        template = await fs.readFile(path.resolve('index.html'), 'utf-8');
-        template = await vite.transformIndexHtml(url, template);
-      }
+      template = await fs.readFile(path.resolve('index.html'), 'utf-8');
+      template = await vite.transformIndexHtml(url, template);
 
       render = (await import(path.resolve('dist/server/entry-server.js')))
         .render;
