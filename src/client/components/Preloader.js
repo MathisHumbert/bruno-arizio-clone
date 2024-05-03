@@ -45,7 +45,7 @@ export default class Preloader extends Component {
     });
 
     const desktopImages = map(
-      appData.projects,
+      window.PROJECTS,
       (project) => project.data.desktop.url
     );
 

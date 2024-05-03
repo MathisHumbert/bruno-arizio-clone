@@ -19,7 +19,7 @@ export default class Transition {
 
   createBackground() {
     const project = find(
-      appData.projects,
+      window.PROJECTS,
       (_, projectIndex) => projectIndex === this.index
     );
 
@@ -34,7 +34,7 @@ export default class Transition {
 
   createTitles() {
     this.titles = map(
-      appData.projects,
+      window.PROJECTS,
       (project) =>
         new Title({
           scene: this.scene,

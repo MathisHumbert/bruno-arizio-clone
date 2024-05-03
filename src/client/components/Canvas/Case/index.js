@@ -13,7 +13,7 @@ export default class Case {
     this.viewport = viewport;
     this.index = index;
 
-    const project = find(appData.projects, (_, index) => index === this.index);
+    const project = find(window.PROJECTS, (_, index) => index === this.index);
 
     this.texture = window.TEXTURES[project.data.desktop.url];
     this.projectName = project.data.name;

@@ -36,7 +36,7 @@ export default class Home extends EventEmitter {
 
   createProject() {
     this.projects = map(
-      appData.projects,
+      window.PROJECTS,
       (project, index) =>
         new Project({
           scene: this.scene,

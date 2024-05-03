@@ -48,7 +48,7 @@ export default class Index extends EventEmitter {
   }
 
   createBackground() {
-    const textures = appData.projects.map(
+    const textures = window.PROJECTS.map(
       (project) => window.TEXTURES[project.data.desktop.url]
     );
 

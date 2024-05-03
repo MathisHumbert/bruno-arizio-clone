@@ -19,7 +19,7 @@ export default class Titles {
 
   createTitles() {
     this.titles = map(
-      appData.projects,
+      window.PROJECTS,
       (project, index) =>
         new Title({
           scene: this.group,
