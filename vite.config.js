@@ -10,7 +10,7 @@ export default {
     minify: 'esbuild',
     rollupOptions: {
       input: {
-        main_js: 'src/client/index.js',
+        main_js: 'src/app/index.js',
         main_css: 'src/styles/index.scss',
       },
       output: {
