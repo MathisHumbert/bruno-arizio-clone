@@ -85,155 +85,114 @@ if (!isProduction) {
   app.use(base, sirv('./dist/client', { extensions: [] }));
 }
 
-app.use(async (req, res, next) => {
-  try {
-    const url = req.originalUrl.replace(base, '');
-    const api = initApi(req);
-
-    let template;
-    let render;
-
-    if (!isProduction) {
-      template = await fs.readFile(path.resolve('index.html'), 'utf-8');
-      template = await vite.transformIndexHtml(url, template);
-      render = (await vite.ssrLoadModule(path.resolve('src/entry-server.js')))
-        .render;
-    } else {
-      template = await fs.readFile(path.resolve('index.html'), 'utf-8');
-      template = await vite.transformIndexHtml(url, template);
-
-      render = (await import(path.resolve('dist/server/entry-server.js')))
-        .render;
-    }
-
-    const defaults = await fetchDefaults(api);
-
-    req.api = api;
-    req.defaults = defaults;
-    req.render = render;
-    req.template = template;
-
-    next();
-  } catch (e) {
-    vite?.ssrFixStacktrace(e);
-    console.log(e.stack);
-    res.status(500).end(e.stack);
-  }
-});
+app.set('views', path.resolve('src/views'));
+app.set('view engine', 'pug');
 
 app.get('/', async (req, res) => {
-  try {
-    const { api, render, defaults, template } = req;
+  const api = initApi(req);
 
-    const home = await fetchHome(api);
+  const defaults = await fetchDefaults(api);
+  const home = await fetchHome(api);
 
-    const rendered = await render('home', { ...defaults, home });
-
-    const html = template
-      .replace('<!--app-head-->', rendered.head ?? '')
-      .replace('<!--app-html-->', rendered.html ?? '')
-      .replace('<!--app-script-->', rendered.script ?? '');
-
-    res.status(200).set({ 'Content-Type': 'text/html' }).send(html);
-  } catch (e) {
-    vite?.ssrFixStacktrace(e);
-    console.log(e.stack);
-    res.status(500).end(e.stack);
-  }
+  res.render('pages/home', {
+    ...defaults,
+    home,
+    isProduction,
+  });
 });
 
-app.get('/about', async (req, res) => {
-  try {
-    const { api, render, defaults, template } = req;
+// app.get('/about', async (req, res) => {
+//   try {
+//     const { api, render, defaults, template } = req;
 
-    const about = await fetchAbout(api);
+//     const about = await fetchAbout(api);
 
-    const rendered = await render('about', { ...defaults, about });
+//     const rendered = await render('about', { ...defaults, about });
 
-    const html = template
-      .replace('<!--app-head-->', rendered.head ?? '')
-      .replace('<!--app-html-->', rendered.html ?? '')
-      .replace('<!--app-script-->', rendered.script ?? '');
+//     const html = template
+//       .replace('<!--app-head-->', rendered.head ?? '')
+//       .replace('<!--app-html-->', rendered.html ?? '')
+//       .replace('<!--app-script-->', rendered.script ?? '');
 
-    res.status(200).set({ 'Content-Type': 'text/html' }).send(html);
-  } catch (e) {
-    vite?.ssrFixStacktrace(e);
-    console.log(e.stack);
-    res.status(500).end(e.stack);
-  }
-});
+//     res.status(200).set({ 'Content-Type': 'text/html' }).send(html);
+//   } catch (e) {
+//     vite?.ssrFixStacktrace(e);
+//     console.log(e.stack);
+//     res.status(500).end(e.stack);
+//   }
+// });
 
-app.get('/essays', async (req, res) => {
-  try {
-    const { api, render, defaults, template } = req;
+// app.get('/essays', async (req, res) => {
+//   try {
+//     const { api, render, defaults, template } = req;
 
-    const about = await fetchAbout(api);
-    const essays = await fetchEssays(api);
+//     const about = await fetchAbout(api);
+//     const essays = await fetchEssays(api);
 
-    const rendered = await render('essays', { ...defaults, about, essays });
+//     const rendered = await render('essays', { ...defaults, about, essays });
 
-    const html = template
-      .replace('<!--app-head-->', rendered.head ?? '')
-      .replace('<!--app-html-->', rendered.html ?? '')
-      .replace('<!--app-script-->', rendered.script ?? '');
+//     const html = template
+//       .replace('<!--app-head-->', rendered.head ?? '')
+//       .replace('<!--app-html-->', rendered.html ?? '')
+//       .replace('<!--app-script-->', rendered.script ?? '');
 
-    res.status(200).set({ 'Content-Type': 'text/html' }).send(html);
-  } catch (e) {
-    vite?.ssrFixStacktrace(e);
-    console.log(e.stack);
-    res.status(500).end(e.stack);
-  }
-});
+//     res.status(200).set({ 'Content-Type': 'text/html' }).send(html);
+//   } catch (e) {
+//     vite?.ssrFixStacktrace(e);
+//     console.log(e.stack);
+//     res.status(500).end(e.stack);
+//   }
+// });
 
-app.get('/index', async (req, res) => {
-  try {
-    const { api, render, defaults, template } = req;
+// app.get('/index', async (req, res) => {
+//   try {
+//     const { api, render, defaults, template } = req;
 
-    const rendered = await render('index', { ...defaults });
+//     const rendered = await render('index', { ...defaults });
 
-    const html = template
-      .replace('<!--app-head-->', rendered.head ?? '')
-      .replace('<!--app-html-->', rendered.html ?? '')
-      .replace('<!--app-script-->', rendered.script ?? '');
+//     const html = template
+//       .replace('<!--app-head-->', rendered.head ?? '')
+//       .replace('<!--app-html-->', rendered.html ?? '')
+//       .replace('<!--app-script-->', rendered.script ?? '');
 
-    res.status(200).set({ 'Content-Type': 'text/html' }).send(html);
-  } catch (e) {
-    vite?.ssrFixStacktrace(e);
-    console.log(e.stack);
-    res.status(500).end(e.stack);
-  }
-});
+//     res.status(200).set({ 'Content-Type': 'text/html' }).send(html);
+//   } catch (e) {
+//     vite?.ssrFixStacktrace(e);
+//     console.log(e.stack);
+//     res.status(500).end(e.stack);
+//   }
+// });
 
-app.get('/case/:id', async (req, res) => {
-  try {
-    const { render, defaults, template } = req;
-    const { projects } = defaults;
+// app.get('/case/:id', async (req, res) => {
+//   try {
+//     const { render, defaults, template } = req;
+//     const { projects } = defaults;
 
-    const project = find(projects, (p) => p.uid === req.params.id);
-    const projectIndex = projects.indexOf(project);
-    const related = projects[projectIndex + 1]
-      ? projects[projectIndex + 1]
-      : projects[0];
+//     const project = find(projects, (p) => p.uid === req.params.id);
+//     const projectIndex = projects.indexOf(project);
+//     const related = projects[projectIndex + 1]
+//       ? projects[projectIndex + 1]
+//       : projects[0];
 
-    const rendered = await render('case', {
-      ...defaults,
-      project,
-      projectIndex,
-      related,
-    });
+//     const rendered = await render('case', {
+//       ...defaults,
+//       project,
+//       projectIndex,
+//       related,
+//     });
 
-    const html = template
-      .replace('<!--app-head-->', rendered.head ?? '')
-      .replace('<!--app-html-->', rendered.html ?? '')
-      .replace('<!--app-script-->', rendered.script ?? '');
+//     const html = template
+//       .replace('<!--app-head-->', rendered.head ?? '')
+//       .replace('<!--app-html-->', rendered.html ?? '')
+//       .replace('<!--app-script-->', rendered.script ?? '');
 
-    res.status(200).set({ 'Content-Type': 'text/html' }).send(html);
-  } catch (e) {
-    vite?.ssrFixStacktrace(e);
-    console.log(e.stack);
-    res.status(500).end(e.stack);
-  }
-});
+//     res.status(200).set({ 'Content-Type': 'text/html' }).send(html);
+//   } catch (e) {
+//     vite?.ssrFixStacktrace(e);
+//     console.log(e.stack);
+//     res.status(500).end(e.stack);
+//   }
+// });
 
 app.listen(port, () => {
   console.log(`Server started at http://localhost:${port}`);

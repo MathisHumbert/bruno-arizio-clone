@@ -1,0 +1,21 @@
+extends ../index.pug 
+
+block variables 
+  - var template = 'home'
+
+block content
+  .home
+    .home__wrapper#wrapper
+      each project, index in projects
+        article.home__project(class=`home__project ${index === 0 ? 'home__project--active' : ''}`)
+          h2.home__project__title=project.data.name
+          a.home__project__link(href=`/case/${project.uid}`, class="home__project__link", data-link)
+            span.home__project__link__wrapper
+              span.home__project__link__text=home.data.explore
+              svg.home__project__link__arrow(xmlns="http://www.w3.org/2000/svg", viewBox="0 0 17.3 6.6", data-link-arrow)
+                path(d="M13.7,0.4l2.9,2.9l-3,3 M16.6,3.3H0")
+      .home__pagination
+        span.home__pagination__wrapper
+          span.home__pagination__number 1
+          span.home__pagination__separator
+          div.home__pagination__number=projects.length
