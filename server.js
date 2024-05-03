@@ -82,7 +82,7 @@ if (!isProduction) {
   const sirv = (await import('sirv')).default;
 
   app.use(compression());
-  app.use(base, sirv('dist/client', { extensions: [] }));
+  app.use(base, sirv(path.resolve('dist/client'), { extensions: [] }));
 }
 
 app.set('views', path.resolve('src/views'));
