@@ -17,6 +17,8 @@ import About from './pages/About';
 import Case from './pages/Case';
 import Essays from './pages/Essays';
 import Index from './pages/Index';
+import Navigation from './components/Navigation';
+import Cursor from './components/Cursor';
 
 export default class App {
   constructor() {
@@ -37,6 +39,8 @@ export default class App {
     this.createCanvas();
     this.createPages();
     this.createPreloader();
+    this.createNavigation();
+    this.createCursor();
 
     this.addEventsListeners();
     this.addLinkListeners();
@@ -80,10 +84,20 @@ export default class App {
     });
   }
 
-  createPreloader() {
-    this.preloader = new Preloader();
+  createNavigation() {
+    this.navigation = new Navigation();
+  }
 
-    this.preloader.preload(this.content);
+  createCursor() {
+    this.cursor = new Cursor(this.responsive.size);
+  }
+
+  createPreloader() {
+    this.preloader = new Preloader(this.content);
+
+    this.preloader.on('start', (texture) =>
+      this.canvas.createPreloader(texture)
+    );
 
     this.preloader.on('preloaded', () => this.onPreloaded());
   }
@@ -104,7 +118,13 @@ export default class App {
 
     await this.canvas.onPreloaded(this.page.index);
 
+    this.navigation.show(this.template);
+
+    this.cursor.show();
+
     this.page.show();
+
+    this.onResize();
   }
 
   async onLoaded(res) {
@@ -115,6 +135,14 @@ export default class App {
       this.previousTemplate,
       this.page.index
     );
+
+    if (this.navigation) {
+      this.navigation.onNavigationEnd(this.template);
+    }
+
+    if (this.cursor) {
+      this.cursor.onNavigationEnd();
+    }
 
     this.page.show(this.canvas.index);
 
@@ -130,6 +158,14 @@ export default class App {
 
   async onChange({ url, push }) {
     if (url === this.url || this.isLoading) return;
+
+    if (this.navigation) {
+      this.navigation.onNavigationStart();
+    }
+
+    if (this.cursor) {
+      this.cursor.onNavigationStart();
+    }
 
     this.url = url;
     this.isLoading = true;
@@ -179,6 +215,10 @@ export default class App {
       this.page.onResize();
     }
 
+    if (this.cursor && this.cursor.onResize) {
+      this.cursor.onResize(this.responsive.size);
+    }
+
     window.requestAnimationFrame(() => {
       if (this.canvas && this.canvas.onResize) {
         this.canvas.onResize();
@@ -194,6 +234,10 @@ export default class App {
     if (this.page && this.page.onTouchDown) {
       this.page.onTouchDown(event);
     }
+
+    if (this.cursor && this.cursor.onTouchDown) {
+      this.cursor.onTouchDown(event);
+    }
   }
 
   onTouchMove(event) {
@@ -204,6 +248,10 @@ export default class App {
     if (this.page && this.page.onTouchMove) {
       this.page.onTouchMove(event);
     }
+
+    if (this.cursor && this.cursor.onTouchMove) {
+      this.cursor.onTouchMove(event);
+    }
   }
 
   onTouchUp(event) {
@@ -213,6 +261,10 @@ export default class App {
 
     if (this.page && this.page.onTouchUp) {
       this.page.onTouchUp(event);
+    }
+
+    if (this.cursor && this.cursor.onTouchUp) {
+      this.cursor.onTouchUp(event);
     }
   }
 
@@ -242,6 +294,10 @@ export default class App {
 
     if (this.canvas && this.canvas.update) {
       this.canvas.update(deltaTime);
+    }
+
+    if (this.cursor && this.cursor.update) {
+      this.cursor.update();
     }
 
     window.requestAnimationFrame(this.update.bind(this));

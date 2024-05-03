@@ -30,7 +30,7 @@ export function renderEssays(data) {
                       </span>
                       <span class="essays__list__item__link__text essays__list__item__link__text--link">
                         <span>${essays.data.link}</span>
-                        <svg class="essays__list__item__link__text__arrow" data-link-arrow="" viewBox="0 0 9.2 9.2" xmlns="http://www.w3.org/2000/svg">
+                        <svg class="essays__list__item__link__text__arrow" data-link-arrow viewBox="0 0 9.2 9.2" xmlns="http://www.w3.org/2000/svg">
                           <path d="M8.7,2.3v6.3H2.3 M8.7,8.7L0.4,0.4"></path>
                         </svg>
                       </span>
@@ -60,7 +60,7 @@ export function renderEssays(data) {
                     about.data.contact_list,
                     (contact) => /*html*/ `
                     <span class="essays__about__description__line">
-                      <a href="${contact.link.url}" class="essays__about__link">${contact.text}</a>
+                      <a href="${contact.link.url}" class="essays__about__link" data-link>${contact.text}</a>
                     </span>
                   `
                   ).join('')}
@@ -75,7 +75,7 @@ export function renderEssays(data) {
                     about.data.social_list,
                     (social) => /*html*/ `
                     <span class="essays__about__description__line">
-                      <a href="${social.link.url}" class="essays__about__link">${social.text}</a>
+                      <a href="${social.link.url}" class="essays__about__link" data-link>${social.text}</a>
                     </span>
                   `
                   ).join('')}

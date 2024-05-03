@@ -16,7 +16,9 @@ export function renderHome(data) {
                 }"
               >
                 <h2 class="home__project__title">${project.data.name}</h2>
-                <a href="/case/${project.uid}" class="home__project__link">
+                <a href="/case/${
+                  project.uid
+                }" class="home__project__link" data-link>
                   <span class="home__project__link__wrapper">
                     <span class="home__project__link__text"
                       >${data.home.data.explore}</span

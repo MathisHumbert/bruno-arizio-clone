@@ -5,6 +5,7 @@ import Home from './Home';
 import Index from './Index/index';
 import Case from './Case';
 import Transition from './Transition';
+import Preloader from './Preloader';
 
 export default class Canvas extends EventEmitter {
   constructor({ template }) {
@@ -119,9 +120,27 @@ export default class Canvas extends EventEmitter {
   }
 
   /**
+   * Preloader.
+   */
+  createPreloader(texture) {
+    this.preloader = new Preloader({
+      scene: this.scene,
+      screen: this.screen,
+      viewport: this.viewport,
+      texture,
+    });
+  }
+
+  /**
    * Events.
    */
   async onPreloaded(index) {
+    if (this.preloader) {
+      await this.preloader.hide(this.template);
+
+      this.preloader = null;
+    }
+
     await this.onChange(this.template, null, index);
   }
 
@@ -233,6 +252,10 @@ export default class Canvas extends EventEmitter {
     if (this.case && this.case.onResize) {
       this.case.onResize({ screen: this.screen, viewport: this.viewport });
     }
+
+    if (this.preloader && this.preloader.onResize) {
+      this.preloader.onResize({ screen: this.screen, viewport: this.viewport });
+    }
   }
 
   onTouchDown(event) {
@@ -291,6 +314,10 @@ export default class Canvas extends EventEmitter {
 
     if (this.indexes && this.indexes.update) {
       this.indexes.update();
+    }
+
+    if (this.preloader && this.preloader.update) {
+      this.preloader.update(deltaTime);
     }
 
     this.renderer.render(this.scene, this.camera);

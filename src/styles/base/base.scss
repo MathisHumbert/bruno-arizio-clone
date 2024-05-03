@@ -11,7 +11,7 @@ html {
   position: fixed;
   overflow: hidden;
   overscroll-behavior: none;
-  // cursor: none;
+  cursor: none;
   font-size: 10px;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
@@ -57,7 +57,7 @@ body {
 
 a {
   color: inherit;
-  // cursor: none;
+  cursor: none;
   outline: none;
   text-decoration: none;
 }
@@ -89,4 +89,17 @@ img {
 
 .content {
   @extend %cover;
+}
+
+.cursor {
+  height: 100%;
+  left: 0;
+  mix-blend-mode: difference;
+  opacity: 0;
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  visibility: hidden;
+  width: 100%;
+  z-index: 2;
 }

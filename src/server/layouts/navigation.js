@@ -20,7 +20,7 @@ export function renderNavigation(data) {
       ${map(
         navigation.data.links,
         (link) => /*html*/ `
-        <a href="${link.link}" class="navigation__link">
+        <a href="${link.link}" class="navigation__link" data-link>
           <span class="navigation__link__wrapper" data-link-magnet>
             <span>
               <span class="navigation__link__text">
