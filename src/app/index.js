@@ -95,9 +95,15 @@ export default class App {
   createPreloader() {
     this.preloader = new Preloader(this.content);
 
-    this.preloader.on('start', (texture) =>
-      this.canvas.createPreloader(texture)
-    );
+    this.preloader.on('start', (texture) => {
+      if (
+        this.template !== 'about' &&
+        this.template !== 'essays' &&
+        this.template !== 'case'
+      ) {
+        this.canvas.createPreloader(texture);
+      }
+    });
 
     this.preloader.on('preloaded', () => this.onPreloaded());
   }

@@ -6,8 +6,8 @@ block variables
 block content
   .about
     .about__wrapper#wrapper
-      .about__title=PrismicDOM.RichText.asHtml(about.data.title)
-      .about__description.about__description--biography=PrismicDOM.RichText.asHtml(about.data.description)
+      .about__title!=prismicH.asHTML(about.data.title)
+      .about__description.about__description--biography!=prismicH.asHTML(about.data.description)
       .about__columns
         .about__columns__column
           h2.about__subtitle(data-animation="text")=about.data.contact_title
@@ -26,4 +26,4 @@ block content
             each social in about.data.social_list
               span.about__description__line
                 a.about__link(href=social.link.url, data-animation="text")=social.text
-      .about__description.about__description--credits=PrismicDOM.RichText.asHtml(about.data.credits)
+      .about__description.about__description--credits!=prismicH.asHTML(about.data.credits)

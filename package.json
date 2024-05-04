@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@prismicio/client": "^7.3.1",
+    "@prismicio/helpers": "^2.3.9",
     "body-parser": "^1.20.2",
     "compression": "^1.7.4",
     "dotenv": "^16.4.4",
@@ -19,7 +20,6 @@
     "method-override": "^3.0.0",
     "morgan": "^1.10.0",
     "node-fetch": "^3.3.2",
-    "prismic-dom": "^2.2.7",
     "pug": "^3.0.2",
     "sass": "^1.71.0",
     "sirv": "^2.0.4"

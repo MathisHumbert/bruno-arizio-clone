@@ -1,0 +1,12 @@
+extends ../index.pug 
+
+block variables 
+  - var template = 'index'
+
+block content
+  .index
+    .index__wrapper#wrapper
+      each project in projects
+        a.index__link(href=`/case/${project.uid}`, data-link)
+          svg.index__link__arrow(xmlns="http://www.w3.org/2000/svg", viewBox="0 0 9.2 9.2", data-link-arrow)
+            path(d="M8.7,2.3v6.3H2.3 M8.7,8.7L0.4,0.4")

@@ -1,0 +1,38 @@
+extends ../index.pug 
+
+block variables 
+  - var template = 'case'
+
+block content
+  .case(class=`case--${project.data.type.toLowerCase()}` data-index=projectIndex)
+    button.case__header__button
+      span.case__header__button__text Scroll
+      svg.case__header__button__arrow(xmlns="http://www.w3.org/2000/svg", viewBox="0 0 6.6 17.3")
+        path(d="M6.3,13.7l-2.9,2.9l-3,-3")
+        path(d="M3.4,16.6V0")
+    .case__wrapper
+      header.case__header
+        h1.case__header__title=project.data.name
+      .case__content
+        .case__content__wrapper
+          section.case__information
+            .case__information__columns
+              p.case__information__text(data-animation="text")=project.data.label
+              p.case__information__text(data-animation="text")=` / ${project.data.year}`
+            p.case__information__description(data-animation="text")=project.data.description
+          each item in project.data.body
+            if item.slice_type === 'image'
+              figure.case__image(style=`max-width: ${Math.min(item.primary.image.dimensions.width, 1920)}px`)
+                span.case__image__wrapper(style=`padding-top: ${(item.primary.image.dimensions.height / item.primary.image.dimensions.width) * 100}%`)
+                  img.case__image__media(src=item.primary.image.url, alt=item.primary.image.alt)
+            else if item.slice_type === 'highlight'
+              section.case__highlight
+                p.case__highlight__text=item.primary.highlight
+          footer.case__footer
+            span.case__footer__label Go to
+            span.case__footer__wrapper
+              a.case__footer__button(href=`/case/${related.uid}`, data-link)
+                span.case__footer__button__text(data-text=related.data.name)=related.data.name
+                svg.case__footer__button__arrow(xmlns="http://www.w3.org/2000/svg", viewBox="0 0 9.2 9.2", data-link-arrow)
+                  path(d="M8.7,2.3v6.3H2.3")
+                  path(d="M8.7,8.7L0.4,0.4")

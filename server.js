@@ -1,4 +1,3 @@
-import fs from 'node:fs/promises';
 import express from 'express';
 import fetch from 'node-fetch';
 import errorHandler from 'errorhandler';
@@ -6,6 +5,7 @@ import logger from 'morgan';
 import bodyParser from 'body-parser';
 import methodOverride from 'method-override';
 import * as prismic from '@prismicio/client';
+import * as prismicH from '@prismicio/helpers';
 import path from 'path';
 import lodash from 'lodash';
 import 'dotenv/config';
@@ -36,7 +36,7 @@ const fetchDefaults = async (api) => {
     find(projectsList, { uid: project.uid })
   );
 
-  return { navigation, projects, assets };
+  return { navigation, projects, assets, prismicH, isProduction };
 };
 
 const fetchHome = async (api) => {
@@ -95,104 +95,66 @@ app.get('/', async (req, res) => {
   const home = await fetchHome(api);
 
   res.render('pages/home', {
-    ...defaults,
     home,
-    isProduction,
+    ...defaults,
   });
 });
 
-// app.get('/about', async (req, res) => {
-//   try {
-//     const { api, render, defaults, template } = req;
+app.get('/about', async (req, res) => {
+  const api = initApi(req);
 
-//     const about = await fetchAbout(api);
+  const defaults = await fetchDefaults(api);
+  const about = await fetchAbout(api);
 
-//     const rendered = await render('about', { ...defaults, about });
+  res.render('pages/about', {
+    about,
+    ...defaults,
+  });
+});
 
-//     const html = template
-//       .replace('<!--app-head-->', rendered.head ?? '')
-//       .replace('<!--app-html-->', rendered.html ?? '')
-//       .replace('<!--app-script-->', rendered.script ?? '');
+app.get('/essays', async (req, res) => {
+  const api = initApi(req);
 
-//     res.status(200).set({ 'Content-Type': 'text/html' }).send(html);
-//   } catch (e) {
-//     vite?.ssrFixStacktrace(e);
-//     console.log(e.stack);
-//     res.status(500).end(e.stack);
-//   }
-// });
+  const defaults = await fetchDefaults(api);
+  const about = await fetchAbout(api);
+  const essays = await fetchEssays(api);
 
-// app.get('/essays', async (req, res) => {
-//   try {
-//     const { api, render, defaults, template } = req;
+  res.render('pages/essays', {
+    essays,
+    about,
+    ...defaults,
+  });
+});
 
-//     const about = await fetchAbout(api);
-//     const essays = await fetchEssays(api);
+app.get('/index', async (req, res) => {
+  const api = initApi(req);
 
-//     const rendered = await render('essays', { ...defaults, about, essays });
+  const defaults = await fetchDefaults(api);
 
-//     const html = template
-//       .replace('<!--app-head-->', rendered.head ?? '')
-//       .replace('<!--app-html-->', rendered.html ?? '')
-//       .replace('<!--app-script-->', rendered.script ?? '');
+  res.render('pages/index', {
+    ...defaults,
+  });
+});
 
-//     res.status(200).set({ 'Content-Type': 'text/html' }).send(html);
-//   } catch (e) {
-//     vite?.ssrFixStacktrace(e);
-//     console.log(e.stack);
-//     res.status(500).end(e.stack);
-//   }
-// });
+app.get('/case/:id', async (req, res) => {
+  const api = initApi(req);
 
-// app.get('/index', async (req, res) => {
-//   try {
-//     const { api, render, defaults, template } = req;
+  const defaults = await fetchDefaults(api);
+  const { projects } = defaults;
 
-//     const rendered = await render('index', { ...defaults });
+  const project = find(projects, (p) => p.uid === req.params.id);
+  const projectIndex = projects.indexOf(project);
+  const related = projects[projectIndex + 1]
+    ? projects[projectIndex + 1]
+    : projects[0];
 
-//     const html = template
-//       .replace('<!--app-head-->', rendered.head ?? '')
-//       .replace('<!--app-html-->', rendered.html ?? '')
-//       .replace('<!--app-script-->', rendered.script ?? '');
-
-//     res.status(200).set({ 'Content-Type': 'text/html' }).send(html);
-//   } catch (e) {
-//     vite?.ssrFixStacktrace(e);
-//     console.log(e.stack);
-//     res.status(500).end(e.stack);
-//   }
-// });
-
-// app.get('/case/:id', async (req, res) => {
-//   try {
-//     const { render, defaults, template } = req;
-//     const { projects } = defaults;
-
-//     const project = find(projects, (p) => p.uid === req.params.id);
-//     const projectIndex = projects.indexOf(project);
-//     const related = projects[projectIndex + 1]
-//       ? projects[projectIndex + 1]
-//       : projects[0];
-
-//     const rendered = await render('case', {
-//       ...defaults,
-//       project,
-//       projectIndex,
-//       related,
-//     });
-
-//     const html = template
-//       .replace('<!--app-head-->', rendered.head ?? '')
-//       .replace('<!--app-html-->', rendered.html ?? '')
-//       .replace('<!--app-script-->', rendered.script ?? '');
-
-//     res.status(200).set({ 'Content-Type': 'text/html' }).send(html);
-//   } catch (e) {
-//     vite?.ssrFixStacktrace(e);
-//     console.log(e.stack);
-//     res.status(500).end(e.stack);
-//   }
-// });
+  res.render('pages/case', {
+    ...defaults,
+    project,
+    projectIndex,
+    related,
+  });
+});
 
 app.listen(port, () => {
   console.log(`Server started at http://localhost:${port}`);
