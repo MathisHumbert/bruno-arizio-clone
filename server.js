@@ -156,6 +156,14 @@ app.get('/case/:id', async (req, res) => {
   });
 });
 
+app.use((req, res, next) => {
+  try {
+    res.redirect('/');
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server started at http://localhost:${port}`);
 });
