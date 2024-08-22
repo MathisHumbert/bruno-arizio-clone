@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "node server",
+    "dev": "nodemon server",
     "build": "vite build",
     "preview": "cross-env NODE_ENV=production node server"
   },
@@ -20,6 +20,7 @@
     "method-override": "^3.0.0",
     "morgan": "^1.10.0",
     "node-fetch": "^3.3.2",
+    "nodemon": "^3.1.4",
     "pug": "^3.0.2",
     "sass": "^1.71.0",
     "sirv": "^2.0.4"

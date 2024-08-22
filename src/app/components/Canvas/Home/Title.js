@@ -199,7 +199,6 @@ export default class Title {
 
     this.mesh.position.x =
       -this.viewport.width / 2 + map(percent, -1.25, 1.25, 75, -75);
-    this.mesh.position.z = map(percent, -1.25, 1.25, 50, -50);
 
     this.mesh.rotation.x = map(
       percent,

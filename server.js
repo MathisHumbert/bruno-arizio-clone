@@ -59,11 +59,14 @@ const fetchEssays = async (api) => {
 
 const app = express();
 
-app.use(logger('dev'));
+if (!isProduction) {
+  app.use(logger('dev'));
+  app.use(errorHandler());
+}
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(methodOverride());
-app.use(errorHandler());
 
 let vite;
 
@@ -89,78 +92,110 @@ app.set('views', path.resolve('src/views'));
 app.set('view engine', 'pug');
 
 app.get('/', async (req, res) => {
-  const api = initApi(req);
+  try {
+    const api = initApi(req);
 
-  const defaults = await fetchDefaults(api);
-  const home = await fetchHome(api);
+    const defaults = await fetchDefaults(api);
+    const home = await fetchHome(api);
 
-  res.render('pages/home', {
-    home,
-    ...defaults,
-  });
+    res.render('pages/home', {
+      home,
+      ...defaults,
+    });
+  } catch (e) {
+    vite?.ssrFixStacktrace(e);
+    console.log(e.stack);
+    res.status(500).end(e.stack);
+  }
 });
 
 app.get('/about', async (req, res) => {
-  const api = initApi(req);
+  try {
+    const api = initApi(req);
 
-  const defaults = await fetchDefaults(api);
-  const about = await fetchAbout(api);
+    const defaults = await fetchDefaults(api);
+    const about = await fetchAbout(api);
 
-  res.render('pages/about', {
-    about,
-    ...defaults,
-  });
+    res.render('pages/about', {
+      about,
+      ...defaults,
+    });
+  } catch (error) {
+    vite?.ssrFixStacktrace(e);
+    console.log(e.stack);
+    res.status(500).end(e.stack);
+  }
 });
 
 app.get('/essays', async (req, res) => {
-  const api = initApi(req);
+  try {
+    const api = initApi(req);
 
-  const defaults = await fetchDefaults(api);
-  const about = await fetchAbout(api);
-  const essays = await fetchEssays(api);
+    const defaults = await fetchDefaults(api);
+    const about = await fetchAbout(api);
+    const essays = await fetchEssays(api);
 
-  res.render('pages/essays', {
-    essays,
-    about,
-    ...defaults,
-  });
+    res.render('pages/essays', {
+      essays,
+      about,
+      ...defaults,
+    });
+  } catch (e) {
+    vite?.ssrFixStacktrace(e);
+    console.log(e.stack);
+    res.status(500).end(e.stack);
+  }
 });
 
 app.get('/index', async (req, res) => {
-  const api = initApi(req);
+  try {
+    const api = initApi(req);
 
-  const defaults = await fetchDefaults(api);
+    const defaults = await fetchDefaults(api);
 
-  res.render('pages/index', {
-    ...defaults,
-  });
+    res.render('pages/index', {
+      ...defaults,
+    });
+  } catch (e) {
+    vite?.ssrFixStacktrace(e);
+    console.log(e.stack);
+    res.status(500).end(e.stack);
+  }
 });
 
 app.get('/case/:id', async (req, res) => {
-  const api = initApi(req);
+  try {
+    const api = initApi(req);
 
-  const defaults = await fetchDefaults(api);
-  const { projects } = defaults;
+    const defaults = await fetchDefaults(api);
+    const { projects } = defaults;
 
-  const project = find(projects, (p) => p.uid === req.params.id);
-  const projectIndex = projects.indexOf(project);
-  const related = projects[projectIndex + 1]
-    ? projects[projectIndex + 1]
-    : projects[0];
+    const project = find(projects, (p) => p.uid === req.params.id);
+    const projectIndex = projects.indexOf(project);
+    const related = projects[projectIndex + 1]
+      ? projects[projectIndex + 1]
+      : projects[0];
 
-  res.render('pages/case', {
-    ...defaults,
-    project,
-    projectIndex,
-    related,
-  });
+    res.render('pages/case', {
+      ...defaults,
+      project,
+      projectIndex,
+      related,
+    });
+  } catch (e) {
+    vite?.ssrFixStacktrace(e);
+    console.log(e.stack);
+    res.status(500).end(e.stack);
+  }
 });
 
 app.use((req, res, next) => {
   try {
     res.redirect('/');
-  } catch (error) {
-    console.log(error);
+  } catch (e) {
+    vite?.ssrFixStacktrace(e);
+    console.log(e.stack);
+    res.status(500).end(e.stack);
   }
 });
 

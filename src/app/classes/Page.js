@@ -178,12 +178,12 @@ export default class Page extends EventEmitter {
     this.addEventListeners();
 
     if (this.id === 'about') {
-      gsap.to(document.body, {
+      gsap.to([document.documentElement, document.body], {
         backgroundColor: COLOR_WHITE,
         color: COLOR_GRAY,
       });
     } else {
-      gsap.to(document.body, {
+      gsap.to([document.documentElement, document.body], {
         backgroundColor: COLOR_GRAY,
         color: COLOR_WHITE,
       });
@@ -303,15 +303,11 @@ export default class Page extends EventEmitter {
       this.scroll.ease
     );
 
-    if (this.scroll.target === 0) {
-      this.scroll.current = Math.floor(this.scroll.current);
-    } else {
-      this.scroll.current = Math.ceil(this.scroll.current);
-    }
-
     if (this.scroll.current < 0.1) {
       this.scroll.current = 0;
     }
+
+    this.scroll.current = Number(this.scroll.current.toFixed(2));
 
     if (this.elements.wrapper) {
       this.transform(this.elements.wrapper, this.scroll.current);
