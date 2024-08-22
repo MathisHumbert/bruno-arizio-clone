@@ -9,6 +9,8 @@
   white-space: nowrap;
   mix-blend-mode: difference;
   z-index: 2;
+  opacity: 0;
+  visibility: hidden;
   color: $color-white;
 }
 

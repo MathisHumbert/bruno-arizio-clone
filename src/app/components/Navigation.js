@@ -24,6 +24,7 @@ export default class Navigation extends Component {
     this.animateIn = gsap.timeline();
 
     this.animateIn
+      .set(this.element, { autoAlpha: 1 })
       .fromTo(
         this.elements.linksTexts,
         { yPercent: 100 },
