@@ -13,6 +13,7 @@ export default class Navigation extends Component {
     });
 
     gsap.set(this.elements.linksTexts, { yPercent: 100 });
+    gsap.set(this.element, { autoAlpha: 1 });
   }
 
   /**
@@ -24,7 +25,6 @@ export default class Navigation extends Component {
     this.animateIn = gsap.timeline();
 
     this.animateIn
-      .set(this.element, { autoAlpha: 1 })
       .fromTo(
         this.elements.linksTexts,
         { yPercent: 100 },
